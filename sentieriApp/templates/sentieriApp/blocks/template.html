@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static "sentieriApp/css/bootstrap.css" %}">
+</head>
+<body>
+    {% include "sentieriApp/blocks/navbar.html" %}
+    <div class="container">
+        {% block body %}
+        {% endblock %}
+    </div>
+</body>
+<script src="{% static "sentieriApp/js/bootstrap.bundle.min.js" %}" integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o" crossorigin="anonymous"></script>
+</html>

@@ -1,0 +1,11 @@
+{% extends "sentieriApp/blocks/template.html" %}
+
+{% block body %}
+<body>
+<h3>Sentieri</h3>
+<ul>
+    {% for s in sentieri %}
+        <li><a href="/sentieri/{{ s.id }}">{{ s.titolo }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

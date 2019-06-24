@@ -1,0 +1,11 @@
+{% extends "sentieriApp/blocks/template.html" %}
+
+{% block body %}
+    <h1>{{ sentiero.titolo }}</h1>
+    <p>{{ sentiero.descrizione }}</p>
+    <p><a href="/sentieri/punto/{{ sentiero.ptoGeograficoPartenza.id}}">{{ sentiero.ptoGeograficoPartenza }}</a></p>
+    <p><a href="/sentieri/punto/{{ sentiero.ptoGeograficoArrivo.id }}">{{ sentiero.ptoGeograficoArrivo }}</a></p>
+
+    <a href="/sentieri">Indietro</a>
+
+{% endblock %}
