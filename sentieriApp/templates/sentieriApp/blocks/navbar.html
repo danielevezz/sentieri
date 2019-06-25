@@ -1,22 +1,28 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Navbar w/ text</a>
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">Sentieri</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
+      <li class="nav-item">
         <a class="nav-link" href="{% url "index" %}">Home
           <span class="sr-only">(current)</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{% url "login" %}">Login</a>
+        <li class="nav-item">
+        <a class="nav-link" href="{% url "logout" %}">Logout
+          <span class="sr-only">(current)</span>
+        </a>
       </li>
     </ul>
     <span class="navbar-text white-text">
-        <a href="{% url "areaPersonale" idUtente=request.user.id %}"> {{ request.user.username }}</a>
+        {% if user.is_authenticated %}
+            <a href="{% url "areaPersonale" idUtente=request.user.id %}"> {{ request.user.username }}</a>
+        {% else %}
+            <a href="{% url "login" %}">Login</a>
+        {% endif %}
     </span>
   </div>
 </nav>

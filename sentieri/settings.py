@@ -110,7 +110,7 @@ AUTH_USER_MODEL = "sentieriApp.Utente"
 
 LANGUAGE_CODE = 'it-it'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Rome'
 
 USE_I18N = True
 

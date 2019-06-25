@@ -1,6 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale
+from .forms import CreazioneAccount
+from django.contrib.auth import login, authenticate
 
 
 def index(request):
@@ -12,7 +13,10 @@ def index(request):
 
 def dettagliSentiero(request, idSentiero):
     sentiero = get_object_or_404(Sentiero, pk=idSentiero)
-    return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero})
+    cic = str(isCiclico(idSentiero))
+
+    return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero,
+                                                                'ciclico': cic})
 
 
 def areaPersonale(request, idUtente):
@@ -25,20 +29,32 @@ def dettagliPuntoGeografico(request, idPtoGeografico):
     ptogeog = get_object_or_404(PuntoGeografico, pk=idPtoGeografico)
     return render(request, 'sentieriApp/puntoGeografico.html', {'punto': ptogeog})
 
-def nuovoAccount(request):
-    return render(request, 'sentieriApp/creazioneAccount.html')
+def creazioneAccount(request):
+    form = CreazioneAccount(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_pass = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_pass)
+            login(request,user)
+            return redirect("index")
+        else:
+            form = CreazioneAccount()
+    return render(request, 'registration/creazioneAccount.html', {"form" : form})
 
 
 
 # Queries
 
 def isCiclico(idSentiero):
-    query = """
-                select ciclico
-                from sentiero
-                where id=%s 
-            """, [idSentiero]
-    return Sentiero.objects.raw(query)
+    # query = """
+    #             select ciclico
+    #             from sentiero
+    #             where id=%s
+    #         """, [idSentiero]
+    return Sentiero.objects.filter(id=idSentiero).get().ciclico
+    # return Sentiero.objects.raw(query)
 
 
 def cercaPerTitolo(stringa):

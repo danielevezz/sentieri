@@ -1,12 +1,13 @@
 from django.db import models
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+
 
 
 class Sentiero(models.Model):
     ptoGeograficoPartenza = models.ForeignKey('PuntoGeografico', on_delete=models.CASCADE, related_name="partenza")
     ptoGeograficoArrivo = models.ForeignKey('PuntoGeografico', on_delete=models.CASCADE, related_name="arrivo")
-    difficolta = models.ForeignKey('Difficolta', on_delete=models.CASCADE())
+    difficolta = models.ForeignKey('Difficolta', on_delete=models.CASCADE, default='E')
     titolo = models.CharField(max_length=50)
     durata = models.IntegerField(blank=True, default=0)
     descrizione = models.TextField()
@@ -116,14 +117,14 @@ class Citta(models.Model):
         db_table = "citta"
 
 
+OPZIONI_SESSO = (("M", "Uomo"), ("F", "Donna"), ("A", "Altro"))
+
+# Utente definisce solo i campi aggiuntivi
+# AbstractUser definisce i campi principali come username, password, nome, ...
 class Utente(AbstractUser):
     residenza = models.ForeignKey(Citta, on_delete=models.SET_DEFAULT, default=1, blank=True)
-    nome = models.CharField(max_length=30)
-    cognome = models.TextField(max_length=30)
-    password = models.CharField(max_length=30)
-    username = models.TextField(max_length=30)
-    eta = models.IntegerField
-    sesso = models.BooleanField
+    sesso = models.CharField(max_length=1, choices=OPZIONI_SESSO, default="A", blank=True)
+    eta = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return self.username
@@ -234,7 +235,7 @@ class Commento(models.Model):
 
 class Difficolta(models.Model):
     diffs = (("T", "Turistico"), ("E", "Escursionistico"), ("EE", "Escursionisti esperti"), ("EEA", "Escursionisti esperti con attrezzatura"))
-    nome = models.CharField(max_length=3, choices=diffs,default="E", primary_key=True)
+    nome = models.CharField(max_length=3, choices=diffs, default="E", primary_key=True)
 
     def __str__(self):
         return self.nome
@@ -257,10 +258,15 @@ class EsperienzaPersonale(models.Model):
 
     class Meta:
         verbose_name = 'Esperienza personale'
-        verbose_name_plural = 'Esperienze personale'
+        verbose_name_plural = 'Esperienze personali'
         db_table = "esperienza"
 
 
 class Preferito(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Preferito'
+        verbose_name_plural = 'Preferiti'
+        db_table = "preferito"
