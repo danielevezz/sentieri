@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 class Sentiero(models.Model):
     ptoGeograficoPartenza = models.ForeignKey('PuntoGeografico', on_delete=models.CASCADE, related_name="partenza")
     ptoGeograficoArrivo = models.ForeignKey('PuntoGeografico', on_delete=models.CASCADE, related_name="arrivo")
+    difficolta = models.ForeignKey('Difficolta', on_delete=models.CASCADE())
     titolo = models.CharField(max_length=50)
     durata = models.IntegerField(blank=True, default=0)
     descrizione = models.TextField()
@@ -14,10 +15,11 @@ class Sentiero(models.Model):
     discesa = models.IntegerField(blank=True, default=0)                     # Metri in discesa del percorso
     altitudineMax = models.IntegerField(blank=True, default=0)
     altitudineMin = models.IntegerField(blank=True, default=0)
-    visite = models.IntegerField(default=0)             # Non ho ben capito
     ciclico = models.BooleanField(default=False)        # Se il sentiero è ciclico o meno
     linkMappa = models.URLField(blank=True, default="")             # Link alla mappa del percorso (opzionale)
     difficoltaMedia = models.IntegerField()
+    visite = models.IntegerField(default=0)             # Non ho ben capito
+
 
     # Mancano le chiavi esterne
 
@@ -116,6 +118,12 @@ class Citta(models.Model):
 
 class Utente(AbstractUser):
     residenza = models.ForeignKey(Citta, on_delete=models.SET_DEFAULT, default=1, blank=True)
+    nome = models.CharField(max_length=30)
+    cognome = models.TextField(max_length=30)
+    password = models.CharField(max_length=30)
+    username = models.TextField(max_length=30)
+    eta = models.IntegerField
+    sesso = models.BooleanField
 
     def __str__(self):
         return self.username
@@ -238,8 +246,8 @@ class Difficolta(models.Model):
 
 
 class EsperienzaPersonale(models.Model):
-    voto = models.IntegerField()
-    difficolta = models.ForeignKey(Difficolta, on_delete=models.CASCADE)
+    voto = models.IntegerField() #tra 1 e 10
+    difficolta = models.IntegerField #tra 1 e 10
     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     data = models.ForeignKey(Data, on_delete=models.CASCADE)
