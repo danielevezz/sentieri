@@ -7,9 +7,12 @@
     <br>
     <div>
         <h2>Esperienze personali</h2>
+        <h5><a href="{% url "inserisciEsperienza" %}">Aggiungi nuova esperienza</a></h5>
         {% for e in esperienze %}
             <h3> {{ e.sentiero }}</h3>
-            <p>{{ e.data }}</p>
+            <p>In data: {{ e.data }}</p>
+            <p>Voto: {{ e.voto }}</p>
+            <p>Difficolta: {{ e.difficolta }}</p>
             <hr>
         {% endfor %}
     </div>

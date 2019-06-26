@@ -119,6 +119,7 @@ class Citta(models.Model):
 
 OPZIONI_SESSO = (("M", "Uomo"), ("F", "Donna"), ("A", "Altro"))
 
+
 # Utente definisce solo i campi aggiuntivi
 # AbstractUser definisce i campi principali come username, password, nome, ...
 class Utente(AbstractUser):
@@ -248,7 +249,7 @@ class Difficolta(models.Model):
 
 class EsperienzaPersonale(models.Model):
     voto = models.IntegerField() #tra 1 e 10
-    difficolta = models.IntegerField #tra 1 e 10
+    difficolta = models.IntegerField(blank=True, default=5) #tra 1 e 10
     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     data = models.ForeignKey(Data, on_delete=models.CASCADE)

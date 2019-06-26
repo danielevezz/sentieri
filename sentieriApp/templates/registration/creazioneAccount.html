@@ -20,7 +20,7 @@
 
             {% csrf_token %}
             <div class="form-group">
-                {{ form }}
+                {{ form.as_p }}
             </div>
                 <input type="submit" class="btn btn-primary" value="Crea"/>
         </form>
