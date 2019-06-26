@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Data
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
 
@@ -12,10 +12,18 @@ def index(request):
 
 
 def dettagliSentiero(request, idSentiero):
-    sentiero = get_object_or_404(Sentiero, pk=idSentiero)
-    cic = str(isCiclico(idSentiero))
-    return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero,
-                                                                'ciclico': cic})
+    # sentiero = get_object_or_404(Sentiero, pk=idSentiero)
+    query = """
+            select sentiero.*, categoria.nome as categoria
+            from sentiero join tag 
+                on sentiero.id = tag.sentiero_id
+                join categoria
+                on tag.categoria_id = categoria.nome
+            where sentiero.id = %s
+    """
+
+    sentiero = Sentiero.objects.raw(query, idSentiero)
+    return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero})
 
 
 def areaPersonale(request, idUtente):
@@ -30,7 +38,6 @@ def dettagliPuntoGeografico(request, idPtoGeografico):
 
 
 # Form Views
-
 
 def creazioneAccount(request):
     form = CreazioneAccount(request.POST or None)
@@ -77,5 +84,5 @@ def cercaPerTitolo(stringa):
                 select *
                 from sentiero
                 where titolo like %s
-            """, [stringa]
-    return Sentiero.objects.raw(query)
+            """
+    return Sentiero.objects.raw(query, [stringa])

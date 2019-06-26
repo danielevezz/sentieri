@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
-from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, Data
+from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale
 
 
 class CreazioneAccount(UserCreationForm):
@@ -21,8 +21,7 @@ class InserisciEsperienza(ModelForm):
     voto = forms.IntegerField(min_value=1, max_value=10)
     difficolta = forms.IntegerField(min_value=1, max_value=10)
     sentiero = forms.ModelChoiceField(queryset=Sentiero.objects.all())
-    data = forms.ModelChoiceField(queryset=Data.objects.all())
-
+    data = forms.DateTimeField(widget=forms.SelectDateWidget) # mettere anche passato
 
     class Meta:
         model = EsperienzaPersonale

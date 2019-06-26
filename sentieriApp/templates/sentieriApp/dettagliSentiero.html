@@ -2,11 +2,12 @@
 
 {% block body %}
     <h1>{{ sentiero.titolo }}</h1>
+    <h5>{{ sentiero.categoria }}</h5>
     <p>{{ sentiero.descrizione }}</p>
     <p><a href="/sentieri/punto/{{ sentiero.ptoGeograficoPartenza.id}}">{{ sentiero.ptoGeograficoPartenza }}</a></p>
     <p><a href="/sentieri/punto/{{ sentiero.ptoGeograficoArrivo.id }}">{{ sentiero.ptoGeograficoArrivo }}</a></p>
 
-    <p>E' ciclico? {{ ciclico | yesno:"No,Sì" }}</p>
+    <!--p>E' ciclico? {{ ciclico | yesno:"No,Sì" }}</p-->
 
     <a href="/sentieri">Indietro</a>
 

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from sentieriApp.models import Sentiero, Categoria, PuntoGeografico, Tag, Nazione, Citta, Tappa, Interessi, \
-    Difficolta, Luogo, Commento, Utente, Data, TipologiaLuogo, EsperienzaPersonale, Preferito
+    Difficolta, Luogo, Commento, Utente, TipologiaLuogo, EsperienzaPersonale, Preferito
 
 # Register your models here.
 admin.site.register(Sentiero)
@@ -17,7 +17,6 @@ admin.site.register(Commento)
 admin.site.register(Tag)
 
 admin.site.register(Utente)
-admin.site.register(Data)
 admin.site.register(TipologiaLuogo)
 admin.site.register(EsperienzaPersonale)
 admin.site.register(Preferito)

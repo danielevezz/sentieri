@@ -18,8 +18,7 @@ class Sentiero(models.Model):
     altitudineMin = models.IntegerField(blank=True, default=0)
     ciclico = models.BooleanField(default=False)        # Se il sentiero è ciclico o meno
     linkMappa = models.URLField(blank=True, default="")             # Link alla mappa del percorso (opzionale)
-    difficoltaMedia = models.IntegerField()
-    visite = models.IntegerField(default=0)             # Non ho ben capito
+
 
 
     # Mancano le chiavi esterne
@@ -38,6 +37,9 @@ class Sentiero(models.Model):
 class Tag(models.Model):
     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.sentiero.titolo + " - " + self.categoria.nome
 
     class Meta:
         verbose_name = "Tag"
@@ -76,17 +78,17 @@ class PuntoGeografico(models.Model):
         db_table = 'punto_geografico'
 
 
-class Data(models.Model):
-    inizio = models.DateTimeField()
-    fine = models.DateTimeField()
-
-    def __str__(self):
-        return str(self.inizio) + " - " + str(self.fine)
-
-    class Meta:
-        verbose_name = 'Data'
-        verbose_name_plural = 'Date'
-        db_table = 'data'
+# class Data(models.Model):
+#     inizio = models.DateTimeField()
+#     fine = models.DateTimeField()
+#
+#     def __str__(self):
+#         return str(self.inizio) + " - " + str(self.fine)
+#
+#     class Meta:
+#         verbose_name = 'Data'
+#         verbose_name_plural = 'Date'
+#         db_table = 'data'
 
 
 class Nazione(models.Model):
@@ -252,7 +254,7 @@ class EsperienzaPersonale(models.Model):
     difficolta = models.IntegerField(blank=True, default=5) #tra 1 e 10
     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    data = models.ForeignKey(Data, on_delete=models.CASCADE)
+    data_esperienza = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return str(self.user) + " - " + str(self.sentiero)
