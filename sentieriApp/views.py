@@ -1,9 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Tag
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
 
-
+# Una view in postgres
+# create view as ...
+# alter view nome owner postg_djang
 def index(request):
     query = "select * from sentiero "
     sentieri = Sentiero.objects.raw(query)
@@ -13,16 +15,8 @@ def index(request):
 
 def dettagliSentiero(request, idSentiero):
     # sentiero = get_object_or_404(Sentiero, pk=idSentiero)
-    query = """
-            select sentiero.*, categoria.nome as categoria
-            from sentiero join tag 
-                on sentiero.id = tag.sentiero_id
-                join categoria
-                on tag.categoria_id = categoria.nome
-            where sentiero.id = %s
-    """
-
-    sentiero = Sentiero.objects.raw(query, idSentiero)
+    query = "select * from dati_sentiero where id = %s"
+    sentiero = Tag.objects.raw(query,[idSentiero])[0]
     return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero})
 
 
