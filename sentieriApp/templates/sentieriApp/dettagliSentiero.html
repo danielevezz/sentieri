@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1>{{ sentiero.titolo }}</h1>
-    <h5>{{ sentiero.categoria }}</h5>
+    <h5 class="text-muted">{{ sentiero.categoria }}</h5>
     <p>{{ sentiero.descrizione }}</p>
     <p><a href="/sentieri/punto/{{ sentiero.ptoGeograficoPartenza_id}}">Partenza </a></p>
     <p><a href="/sentieri/punto/{{ sentiero.ptoGeograficoArrivo_id }}">Arrivo </a></p>

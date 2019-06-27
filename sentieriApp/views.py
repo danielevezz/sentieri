@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Tag
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
+from django.http import HttpResponseNotFound, Http404
 
 # Una view in postgres
 # create view as ...
@@ -16,8 +17,10 @@ def index(request):
 def dettagliSentiero(request, idSentiero):
     # sentiero = get_object_or_404(Sentiero, pk=idSentiero)
     query = "select * from dati_sentiero where id = %s"
-    sentiero = Tag.objects.raw(query,[idSentiero])[0]
-    return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero})
+    sentiero = Tag.objects.raw(query,[idSentiero])
+    if sentiero.__len__() == 0:
+        raise Http404
+    return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero[0]})
 
 
 def areaPersonale(request, idUtente):
