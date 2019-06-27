@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Tag
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
@@ -17,7 +17,7 @@ def index(request):
 def dettagliSentiero(request, idSentiero):
     # sentiero = get_object_or_404(Sentiero, pk=idSentiero)
     query = "select * from dati_sentiero where id = %s"
-    sentiero = Tag.objects.raw(query,[idSentiero])
+    #sentiero = Tag.objects.raw(query,[idSentiero])
     if sentiero.__len__() == 0:
         raise Http404
     return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero[0]})
@@ -83,3 +83,48 @@ def cercaPerTitolo(stringa):
                 where titolo like %s
             """
     return Sentiero.objects.raw(query, [stringa])
+
+def dati_sentiero():
+    query = """
+                Select Distinct 
+                sentiero.id,
+                sentiero.titolo,
+                sentiero.durata,
+                sentiero.descrizione,
+                sentiero.dislivello,
+                sentiero.salita,
+                sentiero.discesa,
+                sentiero."altitudineMax",
+                sentiero."altitudineMin",
+                sentiero.ciclico,
+                sentiero."linkMappa",
+                sentiero.difficolta_id,
+                sentiero."ptoGeograficoArrivo_id",
+                sentiero."ptoGeograficoPartenza_id",
+                categoria.nome as categoria, 
+                partenza.nome as partenza, 
+                arrivo.nome as arrivo, 
+                count(esperienza.id) as partecipanti, 
+                count(distinct commento.id) as numeroCommenti, 
+                round(avg(esperienza.voto),2) as mediavoti, 
+                ROUND( AVG(esperienza.difficolta),2 ) as difficoltamedia
+                
+                from sentiero 
+                
+                left join punto_geografico as partenza
+                on partenza.id = sentiero."ptoGeograficoPartenza_id"
+                
+                left join punto_geografico as arrivo
+                on arrivo.id = sentiero."ptoGeograficoArrivo_id"
+                
+                left join categoria
+                on sentiero.categoria_id = categoria.nome
+                
+                left join esperienza
+                on sentiero.id = esperienza.sentiero_id
+                
+                left join commento
+                on commento.esperienza_id = esperienza.id
+                
+                group by (sentiero.id, categoria.nome, partenza.nome, arrivo.nome )"""
+    return Sentiero.objects.raw(query)

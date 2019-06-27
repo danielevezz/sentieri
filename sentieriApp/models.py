@@ -18,6 +18,7 @@ class Sentiero(models.Model):
     altitudineMin = models.IntegerField(blank=True, default=0)
     ciclico = models.BooleanField(default=False)        # Se il sentiero è ciclico o meno
     linkMappa = models.URLField(blank=True, default="")             # Link alla mappa del percorso (opzionale)
+    categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE, related_name="categoria", default="Camminata")
 
 
 
@@ -34,17 +35,17 @@ class Sentiero(models.Model):
         db_table = 'sentiero'
 
 
-class Tag(models.Model):
-    sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
-    categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.sentiero.titolo + " - " + self.categoria.nome
-
-    class Meta:
-        verbose_name = "Tag"
-        verbose_name_plural = "Tags"
-        db_table = "tag"
+# class Tag(models.Model):
+#     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
+#     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
+#
+#     def __str__(self):
+#         return self.sentiero.titolo + " - " + self.categoria.nome
+#
+#     class Meta:
+#         verbose_name = "Tag"
+#         verbose_name_plural = "Tags"
+#         db_table = "tag"
 
 
 class Categoria(models.Model):
@@ -77,18 +78,6 @@ class PuntoGeografico(models.Model):
         verbose_name_plural = 'Punti Geografici'
         db_table = 'punto_geografico'
 
-
-# class Data(models.Model):
-#     inizio = models.DateTimeField()
-#     fine = models.DateTimeField()
-#
-#     def __str__(self):
-#         return str(self.inizio) + " - " + str(self.fine)
-#
-#     class Meta:
-#         verbose_name = 'Data'
-#         verbose_name_plural = 'Date'
-#         db_table = 'data'
 
 
 class Nazione(models.Model):
