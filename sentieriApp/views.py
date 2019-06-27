@@ -3,6 +3,7 @@ from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
+from django.db import connection
 
 # Una view in postgres
 # create view as ...
@@ -83,6 +84,63 @@ def cercaPerTitolo(stringa):
                 where titolo like %s
             """
     return Sentiero.objects.raw(query, [stringa])
+
+def utentePubblico(idUtente):
+    query = """
+                select distinct utente.id, username, sesso, eta, count(distinct esperienza.id) as percorsieffettuati, count (distinct commento.id) as commentifatti
+                from utente
+                
+                left join esperienza
+                on utente.id = esperienza.user_id
+                
+                left join commento
+                on commento.esperienza_id = esperienza.id
+                
+                where utente.id = %s
+                
+                group by (utente.id, username, sesso, eta)""", [idUtente]
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        row = cursor.fetchone()
+    return row
+
+def sentieri_effettuati(idUser):
+    query = """
+                select distinct sentiero.id, sentiero.titolo
+                from sentiero
+                
+                join esperienza 
+                on sentiero.id = esperienza.sentiero_id
+                
+                join utente
+                on utente.id = esperienza.user_id
+                
+                where utente.id = %s""", [idUser]
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+def commenti_di_un_utente(idUser):
+    query = """
+            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo
+            from esperienza
+            
+            join commento
+            on commento.esperienza_id = commento.id
+            
+            join sentiero
+            on sentiero.id = esperienza.sentiero_id
+            
+            where esperienza.user_id = %s""", [idUser]
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+
+
 
 def dati_sentiero():
     query = """
