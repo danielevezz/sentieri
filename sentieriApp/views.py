@@ -140,6 +140,66 @@ def commenti_di_un_utente(idUser):
     return table
 
 
+def commenti_di_un_sentiero(idSentiero):
+    query = """
+            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo, utente.username
+            from esperienza
+
+            join commento
+            on commento.esperienza_id = commento.id
+
+            join sentiero
+            on sentiero.id = esperienza.sentiero_id
+            
+            join utente
+            on utente.id = esperienza.user_id
+
+            where sentiero.id = %s""", [idSentiero]
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+def sentieri_della_mia_citta(idProvincia):
+    query = """
+                select distinct sentiero.*
+                from sentiero
+                
+                join punto_geografico as partenza
+                on partenza.id = sentiero."ptoGeograficoPartenza_id"
+                
+                join punto_geografico as arrivo
+                on arrivo.id = sentiero."ptoGeograficoArrivo_id"
+                
+                where arrivo.provincia_id = %s Or partenza.provincia_id = %s""", [idProvincia]
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+def sentieri_percorsi_solo_da_utenti_della_mia_citta(idProvincia):
+    query = """
+                select distinct sentiero.*
+                from sentiero
+                
+                where sentiero.id not in ( select sentiero_id
+                                            from esperienza e1
+                                            join utente u1
+                                            on u1.id = e1.user_id
+                                            where exists (
+                                                            select *
+                                                            from esperienza e2
+                                                            join utente u2
+                                                            on u2.id = e2.user_id
+                                                            where e1.sentiero_id = e2.sentiero_id and %s <> u2.residenza_id
+                                                            )
+                                            )
+                
+                """, [idProvincia]
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
 
 
 def dati_sentiero():
