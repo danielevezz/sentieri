@@ -4,10 +4,10 @@
     <h1>{{ sentiero.1 }}</h1>
     <h5 class="text-muted">{{ sentiero.14 }}</h5>
     <p>{{ sentiero.3 }}</p>
-    <p><a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=sentiero.13 %}">{{ sentiero.15 }} </a></p>
-    <p><a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=sentiero.12 %}">{{ sentiero.16 }} </a></p>
+    <p> Partenza: <a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=sentiero.13 %}">{{ sentiero.15 }} </a></p>
+    <p> Arrivo: <a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=sentiero.12 %}">{{ sentiero.16 }} </a></p>
 
-    <!--p>E' ciclico? {{ ciclico | yesno:"No,Sì" }}</p-->
+    <p>E' ciclico? {{ ciclico | yesno:"No,Sì" }}</p>
 
     <a href="/sentieri">Indietro</a>
 
