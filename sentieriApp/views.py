@@ -97,9 +97,9 @@ def utentePubblico(idUtente):
                 left join commento
                 on commento.esperienza_id = esperienza.id
                 
-                where utente.id = %s
+                where utente.id = """ + str(idUtente) + """
                 
-                group by (utente.id, username, sesso, eta)""", [idUtente]
+                group by (utente.id, username, sesso, eta)"""
 
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -117,11 +117,11 @@ def sentieri_effettuati(idUser):
                 join utente
                 on utente.id = esperienza.user_id
                 
-                where utente.id = %s""", [idUser]
+                where utente.id = """ + str(idUser)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
-    return table
+        return table
 
 def commenti_di_un_utente(idUser):
     query = """
@@ -134,7 +134,7 @@ def commenti_di_un_utente(idUser):
             join sentiero
             on sentiero.id = esperienza.sentiero_id
             
-            where esperienza.user_id = %s""", [idUser]
+            where esperienza.user_id = """ + str(idUser)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
@@ -155,7 +155,7 @@ def commenti_di_un_sentiero(idSentiero):
             join utente
             on utente.id = esperienza.user_id
 
-            where sentiero.id = %s""", [idSentiero]
+            where sentiero.id = """ + str(idSentiero)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
@@ -172,7 +172,7 @@ def sentieri_della_mia_citta(idProvincia):
                 join punto_geografico as arrivo
                 on arrivo.id = sentiero."ptoGeograficoArrivo_id"
                 
-                where arrivo.provincia_id = %s Or partenza.provincia_id = %s""", [idProvincia]
+                where arrivo.provincia_id = %s Or partenza.provincia_id = """ + str(idProvincia)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
@@ -192,11 +192,11 @@ def sentieri_percorsi_solo_da_utenti_della_mia_citta(idProvincia):
                                                             from esperienza e2
                                                             join utente u2
                                                             on u2.id = e2.user_id
-                                                            where e1.sentiero_id = e2.sentiero_id and %s <> u2.residenza_id
+                                                            where e1.sentiero_id = e2.sentiero_id and """ + str(idProvincia) + """ <> u2.residenza_id
                                                             )
                                             )
                 
-                """, [idProvincia]
+                """
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
