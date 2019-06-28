@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm
 from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale
 import datetime
@@ -22,8 +22,10 @@ class InserisciEsperienza(ModelForm):
     voto = forms.IntegerField(min_value=1, max_value=10)
     difficolta = forms.IntegerField(min_value=1, max_value=10)
     sentiero = forms.ModelChoiceField(queryset=Sentiero.objects.all())
-    data = forms.DateTimeField(widget=forms.SelectDateWidget(years=range(1990,datetime.date.today().year + 1))) # mettere anche passato
+    data = forms.DateTimeField(widget=forms.SelectDateWidget(years=range(1990,datetime.date.today().year + 1)))
+
+    commento = forms.CharField(widget=forms.Textarea())
 
     class Meta:
         model = EsperienzaPersonale
-        fields = ('sentiero', 'voto', 'difficolta', 'data')
+        fields = ('sentiero', 'voto', 'difficolta', 'data', "commento")
