@@ -16,12 +16,13 @@ def index(request):
 
 
 def dettagliSentiero(request, idSentiero):
-    # sentiero = get_object_or_404(Sentiero, pk=idSentiero)
-    query = "select * from dati_sentiero where id = %s"
-    #sentiero = Tag.objects.raw(query,[idSentiero])
+    query = "select * from dati_sentiero where id = " + str(idSentiero)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        sentiero = cursor.fetchone()
     if sentiero.__len__() == 0:
         raise Http404
-    return render(request, 'sentieriApp/dettagliSentiero.html',{'sentiero': sentiero[0]})
+    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero})
 
 
 def areaPersonale(request, idUtente):
