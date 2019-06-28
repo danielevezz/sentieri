@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
@@ -22,12 +22,12 @@ def dettagliSentiero(request, idSentiero):
         sentiero = cursor.fetchone()
     if sentiero.__len__() == 0:
         raise Http404
-    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero})
+    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero, "commenti": commenti_di_un_sentiero(idSentiero)})
 
 
 def areaPersonale(request, idUtente):
     utente = get_object_or_404(Utente, pk=idUtente)
-    esperienze = EsperienzaPersonale.objects.filter(user_id=idUtente)
+    esperienze = EsperienzaPersonale.objects.filter(user_id=idUtente).select_related()
     return render(request, 'sentieriApp/areaPersonale.html', {'utente': utente, 'esperienze': esperienze})
 
 
@@ -57,9 +57,13 @@ def inserisciEsperienza(request):
     form = InserisciEsperienza(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
+            dati = form.cleaned_data
             esp = form.save(commit=False) # Non la mando su db
             esp.user = request.user
             esp.save()
+            testoCommento = dati.get("commento")
+            commento = Commento(esperienza_id=esp.id, testo=testoCommento)
+            commento.save()
             return redirect("index")
         else:
             form = InserisciEsperienza()
@@ -143,23 +147,23 @@ def commenti_di_un_utente(idUser):
 
 def commenti_di_un_sentiero(idSentiero):
     query = """
-            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo, utente.username
+            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo, utente.username, utente.id
             from esperienza
-
+            
             join commento
-            on commento.esperienza_id = commento.id
-
+            on commento.esperienza_id = esperienza.id
+            
             join sentiero
             on sentiero.id = esperienza.sentiero_id
             
             join utente
             on utente.id = esperienza.user_id
-
-            where sentiero.id = """ + str(idSentiero)
+            
+            where sentiero.id =""" + str(idSentiero)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
-    return table
+        return table
 
 def sentieri_della_mia_citta(idProvincia):
     query = """
