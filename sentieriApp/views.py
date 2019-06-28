@@ -172,7 +172,7 @@ def sentieri_della_mia_citta(idProvincia):
                 join punto_geografico as arrivo
                 on arrivo.id = sentiero."ptoGeograficoArrivo_id"
                 
-                where arrivo.provincia_id = %s Or partenza.provincia_id = """ + str(idProvincia)
+                where arrivo.provincia_id = """ + str(idProvincia) + """ Or partenza.provincia_id = """ + str(idProvincia)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
