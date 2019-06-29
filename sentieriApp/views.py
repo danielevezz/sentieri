@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
@@ -14,21 +14,26 @@ def index(request):
     context = {'sentieri' : sentieri}
     return render(request,'sentieriApp/index.html', context)
 
-def elencoSentieri(request, idCategorie):
-    stringa = str(idCategorie[0])
-    for c in idCategorie:
-        stringa + " AND " + str(c)
+# Le categorie sono passate come parametro GET nell'URL
+# in questo modo:
+# http://127.0.0.1:8000/sentieri/elencoSentieri/?categorie=Escursionismo,Camminata
+# Se non c'è nulla come valore prendo tutte le categorie
+# La query è:
+# SELECT * from sentiero WHERE sentiero.categoria_id IN (elenco categorie)
+# Ho usato il coso di django perchè non riuscivo con il raw per problemi di apici e stavo smattando
+def elencoSentieri(request):
 
-    query = "select * from sentiero where sentiero.categoria_id = " + stringa
+    categorie = request.GET.get('categorie')
 
-    print(query)
+    if not categorie:
+        categorie = Categoria.objects.all()
+        categorie = [c.nome for c in categorie]
+    else:
+        categorie = categorie.split(",")
 
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        table = cursor.fetchall()
-    sentieri = table
-    context = {'sentieri' : sentieri}
-    return render(request,'sentieriApp/elencoSentieri.html.html', context)
+    sentieri = Sentiero.objects.filter(categoria__in=categorie)
+
+    return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri' : sentieri})
 
 
 def selezionaCategorie(request):

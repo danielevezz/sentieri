@@ -24,7 +24,7 @@ class InserisciEsperienza(ModelForm):
     sentiero = forms.ModelChoiceField(queryset=Sentiero.objects.all())
     data = forms.DateTimeField(widget=forms.SelectDateWidget(years=range(1990,datetime.date.today().year + 1)))
 
-    commento = forms.CharField(widget=forms.Textarea())
+    commento = forms.CharField(widget=forms.Textarea(), required=False)
 
     class Meta:
         model = EsperienzaPersonale
