@@ -9,6 +9,9 @@
     {% endfor %}
 </ul>
 <ul>
-    <p><a href="{% url 'index' %}">Mie Categorie </a></p>
-    </ul>
+    {% if user.is_authenticated %}
+        {% if mieCategorie %}
+        <p><a href="{% url 'index' %}">Mie Categorie </a></p>
+        {% endif %}
+    {%  endif %}
 {% endblock %}

@@ -19,15 +19,16 @@ def selezionaCategorie(request):
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
-    categorie = {'categorie' : table}
+    categorie = table
 
-    mieCategorie = {'mieCategorie' : mie_categorie(request.user.id)}
+    if request.user.is_authenticated:
+        mieCategorie = mie_categorie(request.user.id)
+        print(mieCategorie.__len__())
+    else:
+        mieCategorie = {}
 
-    for m in  mie_categorie(str(request.user.id)):
-        print(str(request.user.id))
-        print(m[0])
 
-    return render(request,'sentieriApp/selezionaCategorie.html', {'categorie' : table, 'mieCategorie' : mie_categorie(request.user.id)})
+    return render(request,'sentieriApp/selezionaCategorie.html', {'categorie' : table, 'mieCategorie' : mieCategorie})
 
 
 def dettagliSentiero(request, idSentiero):
