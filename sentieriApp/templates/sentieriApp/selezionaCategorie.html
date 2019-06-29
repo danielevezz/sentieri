@@ -1,17 +1,19 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
 {% block body %}
+
+
 <body>
 <h3>Seleziona Categorie</h3>
 <ul>
     {% for c in categorie %}
-        <p><a href="{% url "elencoSentieri" idCategorie=c%}">{{ c.0 }} </a></p>
+        <li><a href="{% url "elencoSentieri" %}?categorie={{ c }}">{{ c }} </a></li>
     {% endfor %}
-</ul>
-<ul>
+
     {% if user.is_authenticated %}
         {% if mieCategorie %}
-        <p><a href="{% url 'elencoSentieri' idCategorie=mieCategorie %}">Mie Categorie </a></p>
+            <li><a href="{% url 'elencoSentieri' %}?categorie={{ mieCategorie }}">Mie Categorie </a></li>
         {% endif %}
     {%  endif %}
+</ul>
 {% endblock %}

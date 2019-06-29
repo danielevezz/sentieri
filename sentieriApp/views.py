@@ -37,20 +37,24 @@ def elencoSentieri(request):
 
 
 def selezionaCategorie(request):
-    query = "select categoria.nome from categoria "
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        table = cursor.fetchall()
-    categorie = table
+    # query = "select categoria.nome from categoria "
+    # with connection.cursor() as cursor:
+    #     cursor.execute(query)
+    #     table = cursor.fetchall()
+    # categorie = table
 
+    categorie = Categoria.objects.all()
+    categorie = [c.nome for c in categorie]
+    #
     if request.user.is_authenticated:
         mieCategorie = mie_categorie(request.user.id)
-        print(mieCategorie.__len__())
+        mieCategorie = [i[0] for i in mieCategorie]
+        mieCategorie = ",".join(mieCategorie)
     else:
-        mieCategorie = {}
+        mieCategorie = []
 
-
-    return render(request,'sentieriApp/selezionaCategorie.html', {'categorie' : table, 'mieCategorie' : mieCategorie})
+    return render(request,'sentieriApp/selezionaCategorie.html', {'categorie' : categorie, 'mieCategorie' : mieCategorie})
+    # return render(request, 'sentieriApp/selezionaCategorie.html')
 
 
 def dettagliSentiero(request, idSentiero):
