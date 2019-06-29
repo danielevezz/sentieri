@@ -1,0 +1,14 @@
+{% extends "sentieriApp/blocks/template.html" %}
+
+{% block body %}
+<body>
+<h3>Seleziona Categorie</h3>
+<ul>
+    {% for c in categorie %}
+        <p><a href="{% url 'index' %}">{{ c.0 }} </a></p>
+    {% endfor %}
+</ul>
+<ul>
+    <p><a href="{% url 'index' %}">Mie Categorie </a></p>
+    </ul>
+{% endblock %}

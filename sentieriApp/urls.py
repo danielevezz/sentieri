@@ -7,7 +7,8 @@ urlpatterns = [
     path("utente/<int:idUtente>/", views.areaPersonale, name='areaPersonale'),
     path("punto/<int:idPtoGeografico>/", views.dettagliPuntoGeografico, name='dettagliPuntoGeografico'),
     path("creazione/", views.creazioneAccount, name="creazioneNuovoAccount"),
-    path("esperienza/", views.inserisciEsperienza, name="inserisciEsperienza")
+    path("esperienza/", views.inserisciEsperienza, name="inserisciEsperienza"),
+    path("selezionaCategorie/", views.selezionaCategorie, name="selezionaCategorie")
 ]
 
 urlpatterns += [
