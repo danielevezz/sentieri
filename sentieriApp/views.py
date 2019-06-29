@@ -23,17 +23,25 @@ def index(request):
 # Ho usato il coso di django perchè non riuscivo con il raw per problemi di apici e stavo smattando
 def elencoSentieri(request):
 
-    categorie = request.GET.get('categorie')
+    categorieR = request.GET.get('categorie')
+    filtro = request.GET.get('filtro')
 
-    if not categorie:
+    if not categorieR:
         categorie = Categoria.objects.all()
         categorie = [c.nome for c in categorie]
     else:
-        categorie = categorie.split(",")
+        categorie = categorieR.split(",")
 
     sentieri = Sentiero.objects.filter(categoria__in=categorie)
 
-    return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri' : sentieri})
+    if filtro:
+        print("filtro")
+        sentieri = sentieri.filter(id = 1)
+    else:
+        #sentieri = sentieri.filter(id = 1)
+        print("no filtro")
+
+    return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri' : sentieri, 'categorie' : categorieR})
 
 
 def selezionaCategorie(request):
