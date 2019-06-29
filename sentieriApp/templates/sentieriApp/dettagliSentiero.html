@@ -1,14 +1,49 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
 {% block body %}
-    <h1>{{ sentiero.1 }}</h1>
+    <h1 class="mt-3">{{ sentiero.1 }}</h1>
+    <h5>Voto utenti: {{ sentiero.19 }}</h5>
     <h5 class="text-muted">{{ sentiero.14 }}</h5>
-    <p>{{ sentiero.3 }}</p>
+    <p class="text-justify mt-2 mb-4">{{ sentiero.3 }}</p>
+
+    <div class="row">
+        <!--durata,ciclico      altMinMax,disli,sal,disc        difficID,diffmedia-->
+        <div class="col-md-4 mb-2">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-primary"><b>Info</b></li>
+                <li class="list-group-item"><b>{{ sentiero.2 }}</b> ore</li>
+                <li class="list-group-item">Ciclico: <b>{{ sentiero.9 | yesno:"sì,no" }}</b></li>
+            </ul>
+        </div>
+        <div class="col-md-4 mb-2">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-primary"><b>Percorso</b></li>
+                <li class="list-group-item">Min: <b>{{ sentiero.8 }}</b> m</li>
+                <li class="list-group-item">Max: <b>{{ sentiero.7 }}</b> m</li>
+                <li class="list-group-item">Dislivello: <b>{{ sentiero.4 }}</b> m</li>
+                <li class="list-group-item">Salita: <b>{{ sentiero.5 }}</b> m</li>
+                <li class="list-group-item">Discesa: <b>{{ sentiero.6 }}</b> m</li>
+            </ul>
+        </div>
+        <div class="col-md-4 mb-2">
+            <ul class="list-group">
+                <li class="list-group-item list-group-item-primary"><b>Difficoltà</b></li>
+                <li class="list-group-item">Difficoltà CAI: <b>{{ sentiero.11 }}</b></li>
+                <li class="list-group-item">Difficolta utenti: <b>{{ sentiero.20 }}</b></li>
+            </ul>
+        </div>
+    </div>
+
     <p> Partenza: <a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=sentiero.13 %}">{{ sentiero.15 }} </a></p>
     <p> Arrivo: <a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=sentiero.12 %}">{{ sentiero.16 }} </a></p>
 
+    {% if sentiero.10 %}
+        <a href="{{ sentiero.10 }}">Link mappa</a>
+    {% endif %}
+
     <hr>
     <h3>Commenti</h3>
+    <h6 class="text-muted">{{ sentiero.18 }} commenti</h6>
         {% for c in commenti %}
             <!--sentiero.id, sentiero.titolo, commento.id, commento.testo, utente.username, utente.id-->
             <div class="row mb-3">
