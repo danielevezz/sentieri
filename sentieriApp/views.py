@@ -14,8 +14,25 @@ def index(request):
     context = {'sentieri' : sentieri}
     return render(request,'sentieriApp/index.html', context)
 
+def elencoSentieri(request, idCategorie):
+    stringa = str(idCategorie[0])
+    for c in idCategorie:
+        stringa + " AND " + str(c)
+
+    query = "select * from sentiero where sentiero.categoria_id = " + stringa
+
+    print(query)
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    sentieri = table
+    context = {'sentieri' : sentieri}
+    return render(request,'sentieriApp/elencoSentieri.html.html', context)
+
+
 def selezionaCategorie(request):
-    query = "select * from categoria "
+    query = "select categoria.nome from categoria "
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
@@ -108,7 +125,7 @@ def cercaPerTitolo(stringa):
 
 def mie_categorie(idUser):
     query = """
-                select categoria.*
+                select categoria.nome
                 from categoria
                 join interesse
                 on categoria.nome = interesse.categoria_id

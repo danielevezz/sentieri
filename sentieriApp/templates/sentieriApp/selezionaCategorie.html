@@ -5,13 +5,13 @@
 <h3>Seleziona Categorie</h3>
 <ul>
     {% for c in categorie %}
-        <p><a href="{% url 'index' %}">{{ c.0 }} </a></p>
+        <p><a href="{% url "elencoSentieri" idCategorie=c%}">{{ c.0 }} </a></p>
     {% endfor %}
 </ul>
 <ul>
     {% if user.is_authenticated %}
         {% if mieCategorie %}
-        <p><a href="{% url 'index' %}">Mie Categorie </a></p>
+        <p><a href="{% url 'elencoSentieri' idCategorie=mieCategorie %}">Mie Categorie </a></p>
         {% endif %}
     {%  endif %}
 {% endblock %}
