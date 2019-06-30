@@ -78,10 +78,15 @@ def dettagliSentiero(request, idSentiero):
     return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero, "commenti": commenti_di_un_sentiero(idSentiero)})
 
 
-def areaPersonale(request, idUtente):
-    utente = get_object_or_404(Utente, pk=idUtente)
-    esperienze = EsperienzaPersonale.objects.filter(user_id=idUtente).select_related()
-    return render(request, 'sentieriApp/areaPersonale.html', {'utente': utente, 'esperienze': esperienze})
+def dettagliUtente(request, idUtente):
+    if request.user.is_authenticated:
+        if request.user.id == idUtente:
+            utente = get_object_or_404(Utente, pk=idUtente)
+            esperienze = EsperienzaPersonale.objects.filter(user_id=idUtente).select_related()
+            return render(request, 'sentieriApp/dettagliUtente.html', {'utente': utente, 'esperienze': esperienze,
+                                                                       'personale': True})
+
+    return render(request, 'sentieriApp/dettagliUtente.html', {"utente": utentePubblico(idUtente)})
 
 
 def dettagliPuntoGeografico(request, idPtoGeografico):

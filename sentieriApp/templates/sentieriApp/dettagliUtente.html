@@ -1,0 +1,29 @@
+{% extends "sentieriApp/blocks/template.html" %}
+
+{% block body %}
+    {% if personale %}
+        <h1>{{ utente.username }}</h1>
+        <h4 class="text-muted">{{ utente.email }}</h4>
+        <p>{{ utente.residenza }}</p>
+        <br>
+        <div>
+            <h2>Esperienze personali</h2>
+            <h5 class="text-muted">{{ esperienze | length }} esperienze</h5>
+            <h6 class="mb-4"><a href="{% url "inserisciEsperienza" %}">Aggiungi nuova esperienza</a></h6>
+            {% for e in esperienze %}
+                <h3> {{ e.sentiero }}</h3>
+                <p class="text-muted">{{ e.data_esperienza }}</p>
+                <p>Voto: {{ e.voto }}</p>
+                <p>Difficolta: {{ e.difficolta }}</p>
+                <div class="alert-light">Commento: {{ e.commento_set.get | capfirst }}</div>
+                <hr>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h1 class="mb-3">{{ utente.1 }}</h1>
+        <h6 class="text-muted">{{ utente.2 }}<br>{{ utente.3 }} anni</h6>
+        <h4 class="mt-4">Informazioni</h4>
+        <p>Percorsi effettuati: {{ utente.4 }}<br>
+        Commenti: {{ utente.5 }}</p>
+    {% endif %}
+{% endblock %}
