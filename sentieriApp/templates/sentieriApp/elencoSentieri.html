@@ -4,9 +4,15 @@
 <body>
 <h3>Sentieri</h3>
 <ul>
-    {% for s in sentieri %}
-        <li><a href="{% url "dettagliSentiero" idSentiero=s.id%}">{{ s.titolo }}</a></li>
-    {% endfor %}
-<li><a href="{% url "elencoSentieri" %}?categorie={{ categorie }}&filtro=filtra">Filtro</a></li>
+    {% if sentieri %}
+        {% for s in sentieri %}
+            <li><a href="{% url "dettagliSentiero" idSentiero=s.id%}">{{ s.titolo }}</a></li>
+        {% endfor %}
+        <li><a href="{% url "elencoSentieri" %}?categorie={{ categorie }}&filtro=1,pofff">Filtro</a></li>
+    {% else %}
+        <li>Non ci sono sentieri con questi filtri</li>
+    {% endif %}
+
+
 </ul>
 {% endblock %}

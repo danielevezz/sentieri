@@ -36,7 +36,10 @@ def elencoSentieri(request):
 
     if filtro:
         print("filtro")
-        sentieri = sentieri.filter(id = 1)
+        filtro = filtro.split(",")
+        print(filtro)
+        sentieri = sentieri.filter(id = filtro[0])
+        sentieri = sentieri.filter(titolo__contains=filtro[1])
     else:
         #sentieri = sentieri.filter(id = 1)
         print("no filtro")
