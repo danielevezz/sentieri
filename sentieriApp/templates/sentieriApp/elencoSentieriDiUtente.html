@@ -1,0 +1,17 @@
+{% extends "sentieriApp/blocks/template.html" %}
+
+{% block body %}
+<body>
+<h3>Sentieri</h3>
+<ul>
+    {% if sentieri %}
+        {% for s in sentieri %}
+            <li><a href="{% url "dettagliSentiero" idSentiero=s.0%}">{{ s.1 }}</a> </li>
+        {% endfor %}
+    {% else %}
+        <li>Non ci sono sentieri</li>
+    {% endif %}
+
+
+</ul>
+{% endblock %}

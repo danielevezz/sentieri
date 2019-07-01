@@ -131,6 +131,9 @@ class Interessi(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.categoria.nome)+" - "+str(self.user)
+
     class Meta:
         verbose_name = 'Interesse'
         verbose_name_plural = 'Interessi'
@@ -140,6 +143,9 @@ class Interessi(models.Model):
 class Tappa(models.Model):
     luogo = models.ForeignKey("Luogo", on_delete=models.CASCADE)
     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.luogo.nome)+" - "+str(self.sentiero.titolo)
 
     class Meta:
         verbose_name = 'Tappa'
@@ -206,6 +212,9 @@ class Luogo(models.Model):
     sito = models.URLField(blank=True, default="")
     ptoGeografico = models.ForeignKey(PuntoGeografico, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.nome)
+
     class Meta:
         verbose_name = 'Luogo'
         verbose_name_plural = 'Luoghi'
@@ -257,6 +266,9 @@ class EsperienzaPersonale(models.Model):
 class Preferito(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.sentiero.titolo)+" - "+str(self.user)
 
     class Meta:
         verbose_name = 'Preferito'

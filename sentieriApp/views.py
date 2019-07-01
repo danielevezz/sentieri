@@ -46,6 +46,13 @@ def elencoSentieri(request):
 
     return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri' : sentieri, 'categorie' : categorieR})
 
+def elencoSentieriDiUtente(request, idUtente):
+    return render(request, 'sentieriApp/elencoSentieriDiUtente.html', {'sentieri' : sentieri_effettuati(idUtente)})
+
+def commentiDiUtente(request, idUtente):
+    return render(request, 'sentieriApp/commentiDiUtente.html', {'commenti' : commenti_di_un_utente(idUtente)})
+
+
 
 def selezionaCategorie(request):
     # query = "select categoria.nome from categoria "
@@ -244,7 +251,7 @@ def sentieri_effettuati(idUser):
 
 def commenti_di_un_utente(idUser):
     query = """
-            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo
+            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo, esperienza.voto
             from esperienza
 
             join commento

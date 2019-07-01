@@ -6,7 +6,7 @@
 <ul>
     {% if sentieri %}
         {% for s in sentieri %}
-            <li><a href="{% url "dettagliSentiero" idSentiero=s.id%}">{{ s.titolo }}</a></li>
+            <li><a href="{% url "dettagliSentiero" idSentiero=s.id%}">{{ s.titolo }}</a> </li>
         {% endfor %}
         <li><a href="{% url "elencoSentieri" %}?categorie={{ categorie }}&filtro=1,pofff">Filtro</a></li>
     {% else %}
