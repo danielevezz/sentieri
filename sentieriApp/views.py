@@ -190,6 +190,13 @@ def utentePubblico(idUtente):
 
 
 def utenti_popolari(numEsperienze):
+    media = """ select avg (numeroEsperienze) 
+                    from 
+    					    (select count(esperienza.id) as numeroEsperienze
+    						from esperienza
+    						join utente on utente.id = esperienza.user_id
+    						group by utente.id) as foo"""
+
     query = """
                 select utente.id, utente.username
                 from utente
@@ -198,7 +205,9 @@ def utenti_popolari(numEsperienze):
                 on esperienza.user_id = utente.id
 
                 group by utente.id
-                having count(distinct esperienza.id) >""" + str(numEsperienze)
+                having count(distinct esperienza.id) > (""" + media +")"
+
+
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchone()
