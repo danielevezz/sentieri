@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi
 from .forms import CreazioneAccount, InserisciEsperienza
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
@@ -55,11 +55,6 @@ def commentiDiUtente(request, idUtente):
 
 
 def selezionaCategorie(request):
-    # query = "select categoria.nome from categoria "
-    # with connection.cursor() as cursor:
-    #     cursor.execute(query)
-    #     table = cursor.fetchall()
-    # categorie = table
 
     categorie = Categoria.objects.all()
     categorie = [c.nome for c in categorie]
@@ -101,6 +96,8 @@ def dettagliPuntoGeografico(request, idPtoGeografico):
     return render(request, 'sentieriApp/puntoGeografico.html', {'punto': ptogeog})
 
 
+
+
 # Form Views
 
 def creazioneAccount(request):
@@ -112,6 +109,10 @@ def creazioneAccount(request):
             raw_pass = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_pass)
             login(request, user)
+            cat = form.cleaned_data.get('categorie')
+            for c in cat:
+                interessi = Interessi(categoria=c, user=request.user)
+                interessi.save()
             return redirect("index")
         else:
             form = CreazioneAccount()

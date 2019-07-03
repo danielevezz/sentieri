@@ -21,9 +21,6 @@ class Sentiero(models.Model):
     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE, related_name="categoria", default="Camminata")
 
 
-
-    # Mancano le chiavi esterne
-
     # L'id viene generato automaticamente da Django se non imposto altra chiave primaria
 
     def __str__(self):
@@ -35,17 +32,6 @@ class Sentiero(models.Model):
         db_table = 'sentiero'
 
 
-# class Tag(models.Model):
-#     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
-#     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return self.sentiero.titolo + " - " + self.categoria.nome
-#
-#     class Meta:
-#         verbose_name = "Tag"
-#         verbose_name_plural = "Tags"
-#         db_table = "tag"
 
 
 class Categoria(models.Model):
@@ -67,7 +53,6 @@ class PuntoGeografico(models.Model):
     altitudine = models.IntegerField()
     nome = models.CharField(max_length=30)
     descrizione = models.TextField(blank=True, default="")
-    meteo = models.URLField(blank=True, default="")
     provincia = models.ForeignKey('Citta', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -152,44 +137,6 @@ class Tappa(models.Model):
         verbose_name_plural = 'Tappe'
         db_table = "tappa"
 
-
-# class Effettuato(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
-#     data = models.DateField(auto_now=True);
-#
-#     class Meta:
-#         verbose_name = 'Effettuato'
-#         verbose_name_plural = 'Effettuati'
-#         db_table = "effettuato"
-#
-#
-# class Voto(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
-#     valore = models.IntegerField()
-#
-#     def __str__(self):
-#         return str(self.valore)
-#
-#     class Meta:
-#         verbose_name = 'Voto'
-#         verbose_name_plural = 'Voti'
-#         db_table = "voto"
-#
-#
-# class Difficolta(models.Model):
-#     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-#     sentiero = models.ForeignKey(Sentiero, on_delete=models.CASCADE)
-#     valore = models.IntegerField()
-#
-#     def __str__(self):
-#         return str(self.valore)
-#
-#     class Meta:
-#         verbose_name = 'Difficoltà'
-#         verbose_name_plural = 'Difficoltà'
-#         db_table = "difficolta"
 
 
 class TipologiaLuogo(models.Model):

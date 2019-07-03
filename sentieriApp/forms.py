@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm
-from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale
+from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, Categoria
 import datetime
 
 
@@ -11,10 +11,11 @@ class CreazioneAccount(UserCreationForm):
     sesso = forms.CharField(max_length=1, widget=forms.Select(choices=OPZIONI_SESSO))
     eta = forms.IntegerField(min_value=1, max_value=150)
     residenza = forms.ModelChoiceField(queryset=Citta.objects.all())
+    categorie = forms.ModelMultipleChoiceField(required=False, queryset=Categoria.objects.all())
 
     class Meta:
         model = Utente
-        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'sesso', 'eta', 'residenza')
+        fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'sesso', 'eta', 'residenza', 'categorie')
 
 
 class InserisciEsperienza(ModelForm):
