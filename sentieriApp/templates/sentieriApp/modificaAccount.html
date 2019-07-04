@@ -23,4 +23,8 @@
             </div>
                 <input type="submit" class="btn btn-primary" value="Salva"/>
         </form>
+
+    <br>
+    <p><a href="{% url 'areaPersonale' idUtente=request.user.id %}">Annulla </a></p>
+
 {% endblock %}

@@ -162,7 +162,7 @@ def modificaAccount(request):
                                         'last_name': str(user.last_name),
                                         'sesso': user.sesso,
                                         'eta': user.eta,
-                                        'residenza': Preferito.objects.get(user=user)
+                                        'residenza': user.residenza
                                         })
     return render(request, 'sentieriApp/modificaAccount.html', {"form" : form})
 
