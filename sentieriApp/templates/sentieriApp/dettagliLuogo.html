@@ -1,0 +1,15 @@
+{% extends "sentieriApp/blocks/template.html" %}
+
+{% block body %}
+    <!--nome_luogo   descrizione_luogo    sito    nome_tipo   descrizione_tipo   ptoGeografico_id  -->
+    <h1>{{ luogo.0 }}</h1>
+     <h1>{{ luogo.1 }}</h1>
+     <h1>{{ luogo.2 }}</h1>
+    <br>
+     <h1>{{ luogo.3 }}</h1>
+     <h1>{{ luogo.4 }}</h1>
+    <br>
+         <p><a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=luogo.5 %}">Punto geografico </a></p>
+
+
+{% endblock %}

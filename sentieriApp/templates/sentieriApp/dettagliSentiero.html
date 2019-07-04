@@ -41,6 +41,16 @@
         <a href="{{ sentiero.10 }}">Link mappa</a>
     {% endif %}
 
+    {% if luoghi %}
+        <br>
+        <br>
+        <h3>Luoghi</h3>
+        {% for l in luoghi %}
+             <p> <a href="{% url 'dettagliLuogo' idLuogo=l.0%}">{{ l.1 }} </a></p>
+        {% endfor %}
+        <br>
+    {% endif %}
+
     <hr>
     <h3>Commenti</h3>
     <h6 class="text-muted">{{ sentiero.18 }} commenti</h6>

@@ -75,6 +75,8 @@ def dettagliSentiero(request, idSentiero):
     with connection.cursor() as cursor:
         cursor.execute(query)
         sentiero = cursor.fetchone()
+    luoghi = luoghi_di_un_sentiero(idSentiero)
+
     if sentiero.__len__() == 0:
         raise Http404
     form = SentieroPreferito(request.GET or None)
@@ -94,7 +96,7 @@ def dettagliSentiero(request, idSentiero):
                 form = SentieroPreferito(initial={'preferito': True})
             else:
                 form = SentieroPreferito(initial={'preferito': False})
-    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero, "commenti": commenti_di_un_sentiero(idSentiero), 'form': form})
+    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero, "commenti": commenti_di_un_sentiero(idSentiero), 'form': form, 'luoghi': luoghi})
 
 
 def dettagliUtente(request, idUtente):
@@ -107,6 +109,11 @@ def dettagliUtente(request, idUtente):
                                                                        'personale': True, 'interessi': interessi})
 
     return render(request, 'sentieriApp/dettagliUtente.html', {"utente": utentePubblico(idUtente)})
+
+def dettagliLuogo(request, idLuogo):
+    luogo = informazioni_luogo(idLuogo)
+    return render(request, 'sentieriApp/dettagliLuogo.html', {'luogo':luogo})
+
 
 
 def dettagliPuntoGeografico(request, idPtoGeografico):
@@ -237,6 +244,31 @@ def utentePubblico(idUtente):
         row = cursor.fetchone()
     return row
 
+def luoghi_di_un_sentiero(idSentiero):
+    query = """select luogo.*
+                from tappa
+                join luogo
+                on luogo.id = tappa.luogo_id
+                where tappa.sentiero_id ="""+str(idSentiero)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+def informazioni_luogo(idLuogo):
+    query= """select luogo.nome as nome_luogo, luogo.descrizione as descrizione_luogo,
+                luogo.sito, tipologia_luogo.nome as nome_tipo, tipologia_luogo.descrizione as descrizione_tipo, 
+                punto_geografico.id as ptoGeografico_id
+                from luogo
+                join tipologia_luogo
+                on luogo."tipoLuogo_id"= tipologia_luogo.id
+                join punto_geografico
+                on luogo."ptoGeografico_id" = punto_geografico.id
+                where luogo.id ="""+str(idLuogo)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        row = cursor.fetchone()
+    return row
 
 def utenti_popolari(numEsperienze):
     media = """ select avg (numeroEsperienze) 
@@ -259,7 +291,7 @@ def utenti_popolari(numEsperienze):
 
     with connection.cursor() as cursor:
         cursor.execute(query)
-        table = cursor.fetchone()
+        table = cursor.fetchall()
     return table
 
 
