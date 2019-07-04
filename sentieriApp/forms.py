@@ -17,6 +17,18 @@ class CreazioneAccount(UserCreationForm):
         model = Utente
         fields = ('username', 'first_name', 'last_name', 'password1', 'password2', 'sesso', 'eta', 'residenza', 'categorie')
 
+class ModificaAccount(ModelForm):
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+    sesso = forms.CharField(max_length=1, widget=forms.Select(choices=OPZIONI_SESSO))
+    eta = forms.IntegerField(min_value=1, max_value=150)
+    residenza = forms.ModelChoiceField(queryset=Citta.objects.all())
+    categorie = forms.ModelMultipleChoiceField(required=False, queryset=Categoria.objects.all())
+
+    class Meta:
+        model = Utente
+        fields = ('first_name', 'last_name', 'sesso', 'eta', 'residenza', 'categorie')
+
 
 class InserisciEsperienza(ModelForm):
 

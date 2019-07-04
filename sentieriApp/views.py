@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi, Preferito
-from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito
+from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito, ModificaAccount
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
 from django.db import connection
@@ -135,6 +135,36 @@ def creazioneAccount(request):
         else:
             form = CreazioneAccount()
     return render(request, 'registration/creazioneAccount.html', {"form" : form})
+
+def modificaAccount(request):
+    form = ModificaAccount(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            interessi = Interessi.objects.filter(user=request.user)
+            interessi.delete()
+
+            utente = Utente.objects.filter(id=request.user.id)
+            utente.update(first_name=form.cleaned_data.get('first_name'))
+            utente.update(last_name=form.cleaned_data.get('last_name'))
+            utente.update(sesso=form.cleaned_data.get('sesso'))
+            utente.update(eta=form.cleaned_data.get('eta'))
+            utente.update(residenza=form.cleaned_data.get('residenza'))
+
+            cat = form.cleaned_data.get('categorie')
+            for c in cat:
+                interessi = Interessi(categoria=c, user=request.user)
+                interessi.save()
+
+            return redirect("index")
+    else:
+        user = Utente.objects.get(id= request.user.id)
+        form = ModificaAccount(initial={'first_name': str(user.first_name),
+                                        'last_name': str(user.last_name),
+                                        'sesso': user.sesso,
+                                        'eta': user.eta,
+                                        'residenza': Preferito.objects.get(user=user)
+                                        })
+    return render(request, 'sentieriApp/modificaAccount.html', {"form" : form})
 
 
 def inserisciEsperienza(request):
