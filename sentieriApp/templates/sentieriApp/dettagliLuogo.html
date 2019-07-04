@@ -3,16 +3,15 @@
 {% block body %}
     <!--nome_luogo   descrizione_luogo    sito    nome_tipo   descrizione_tipo   ptoGeografico_id  -->
     <h1 class="mt-3">{{ luogo.0 }}</h1>
-     <h5>Descrizione: {{ luogo.1 }}</h5>
+    <p>{{ luogo.1 }}</p>
     {% if luogo.2 %}
-     <p>Sito: <a href={{ luogo.2 }}>Link </a></p>
+     <p><a href={{ luogo.2 }}>Sito internet</a></p>
     {% endif %}
     <br>
-    <h1 class="mt-3">Tipologia di luogo</h1>
-     <h5>{{ luogo.3 }}</h5>
-     <h5>Descrizione: {{ luogo.4 }}</h5>
-    <br>
-         <p><a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=luogo.5 %}">Punto geografico </a></p>
+    <h5 class="text-muted mt-1">{{ luogo.3 }}</h5>
+    <p>{{ luogo.4 }}</p>
+
+    <p><a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=luogo.5 %}">Punto geografico </a></p>
 
 
 {% endblock %}
