@@ -5,7 +5,7 @@
     <h1 class="mt-3">{{ luogo.0 }}</h1>
      <h5>Descrizione: {{ luogo.1 }}</h5>
     {% if luogo.2 %}
-     <p>Sito: <a href="https://python-forum.io/Thread-Django-don-t-redirect-to-an-external-url">Link </a></p>
+     <p>Sito: <a href={{ luogo.2 }}>Link </a></p>
     {% endif %}
     <br>
     <h1 class="mt-3">Tipologia di luogo</h1>
