@@ -7,6 +7,12 @@
         <p>{{ utente.residenza }}</p>
         <h6 class="text-muted">{{ utente.sesso }}<br>{{ utente.eta }} anni</h6>
         <br>
+        <h6 class="text-muted">Categorie d'interesse: <br></h6>
+        {% for i in interessi %}
+            <h6 class="mb-4">{{ i.categoria }}</h6>
+        {% endfor %}
+        <br>
+        <br>
         <div>
             <h2>Esperienze personali</h2>
             <h5 class="text-muted">{{ esperienze | length }} esperienze</h5>

@@ -102,8 +102,9 @@ def dettagliUtente(request, idUtente):
         if request.user.id == idUtente:
             utente = get_object_or_404(Utente, pk=idUtente)
             esperienze = EsperienzaPersonale.objects.filter(user_id=idUtente).select_related()
+            interessi = Interessi.objects.filter(user_id=idUtente).select_related()
             return render(request, 'sentieriApp/dettagliUtente.html', {'utente': utente, 'esperienze': esperienze,
-                                                                       'personale': True})
+                                                                       'personale': True, 'interessi': interessi})
 
     return render(request, 'sentieriApp/dettagliUtente.html', {"utente": utentePubblico(idUtente)})
 
