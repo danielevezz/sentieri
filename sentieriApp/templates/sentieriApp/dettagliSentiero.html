@@ -4,6 +4,16 @@
     <h1 class="mt-3">{{ sentiero.1 }}</h1>
     <h5>Voto utenti: {{ sentiero.19 }}</h5>
     <h5 class="text-muted">{{ sentiero.14 }}</h5>
+    {% if user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            {% if preferito %}
+                <input type="submit" class="btn btn-primary" value="- Preferito" name="remove_preferito" id="">
+            {% else %}
+                <input type="submit" class="btn btn-outline-dark" value="+ Preferito" name="add_preferito" id="">
+            {% endif %}
+        </form>
+    {% endif %}
     <p class="text-justify mt-2 mb-4">{{ sentiero.3 }}</p>
 
     <div class="row">
@@ -57,29 +67,8 @@
         {% endfor %}
 
     {% if user.is_authenticated %}
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
-                </div>
-            {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endif %}
 
-   <form method="GET">
 
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_p }}
-        </div>
-            <input type="submit" value="Submit" />
-    </form>
 
     {% endif %}
 

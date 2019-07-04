@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Sentiero , PuntoGeografico, Commento, Categoria
 from .forms import CreazioneAccount, InserisciEsperienza, Filtro
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi, Preferito
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi, Preferito,\
+    Difficolta
 from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito, ModificaAccount
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
@@ -27,28 +28,32 @@ def index(request):
 # Ho usato il coso di django perchè non riuscivo con il raw per problemi di apici e stavo smattando
 def elencoSentieri(request):
 
-    filtro = Filtro(request.POST or None)
+    filtro = Filtro(request.POST)
     if request.method == 'POST':
         if filtro.is_valid():
+
             dati = filtro.cleaned_data
-
             categorieR = dati.get('categoria')
-
             durataMax = dati.get("durataMax")
             dislivelloMax = dati.get("dislivelloMax")
             ciclico = dati.get("ciclico")
             difficolta = dati.get("difficolta")
 
-            # TODO costruire stringa mie Categorie
-            # TODO valori di default per i campi form
+            print(difficolta)
 
-            if not categorieR:
+            # TODO costruire stringa mie Categorie
+
+            if categorieR == "Tutte le categorie":
                 categorie = Categoria.objects.all()
                 categorie = [c.nome for c in categorie]
             else:
-                categorie = categorieR.split(",")
+                categorie = [categorieR]
 
-            print(durataMax)
+            if difficolta == "ALL":
+                diff = Difficolta.objects.all()
+                diff = [c.nome for c in diff]
+            else:
+                diff = [difficolta]
 
             sentieri = Sentiero.objects.filter(categoria__in=categorie)
 
@@ -56,20 +61,31 @@ def elencoSentieri(request):
 
             sentieri = sentieri.filter(dislivello__lte=dislivelloMax)
 
-            print(ciclico) # TODO Perche è on
             sentieri = sentieri.filter(ciclico=ciclico)
 
-            sentieri = sentieri.filter(difficolta=difficolta)
+            sentieri = sentieri.filter(difficolta__in=diff)
 
             print(sentieri.query)
 
             return render(request, 'sentieriApp/elencoSentieri.html',
-                      {'sentieri': sentieri, 'form': filtro, "errors": filtro.errors})
+                      {'sentieri': sentieri, 'form': filtro})
 
-    filtro = Filtro(initial={'difficolta': "ALL"})
+    else:
+        filtro = Filtro(initial={'difficolta': "ALL",
+                                 'categoria': "Escursionismo",
+                                 'durataMax': 50,
+                                 'dislivelloMax': 50000,
+                                 'ciclico': False})
+
     sentieri = Sentiero.objects.all()
     print("mlem")
-    return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri': sentieri, 'form': filtro})
+    return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri': sentieri, 'form': filtro,
+                                                               'errors': filtro.errors})
+
+
+
+
+
 
 def elencoSentieriDiUtente(request, idUtente):
     return render(request, 'sentieriApp/elencoSentieriDiUtente.html', {'sentieri' : sentieri_effettuati(idUtente)})
@@ -79,21 +95,21 @@ def commentiDiUtente(request, idUtente):
 
 
 
-def selezionaCategorie(request):
-
-
-    categorie = Categoria.objects.all()
-    categorie = [c.nome for c in categorie]
-    #
-    if request.user.is_authenticated:
-        mieCategorie = mie_categorie(request.user.id)
-        mieCategorie = [i[0] for i in mieCategorie]
-        mieCategorie = ",".join(mieCategorie)
-    else:
-        mieCategorie = []
-
-    return render(request,'sentieriApp/selezionaCategorie.html', {'categorie' : categorie, 'mieCategorie' : mieCategorie})
-    # return render(request, 'sentieriApp/selezionaCategorie.html')
+# def selezionaCategorie(request):
+#
+#
+#     categorie = Categoria.objects.all()
+#     categorie = [c.nome for c in categorie]
+#     #
+#     if request.user.is_authenticated:
+#         mieCategorie = mie_categorie(request.user.id)
+#         mieCategorie = [i[0] for i in mieCategorie]
+#         mieCategorie = ",".join(mieCategorie)
+#     else:
+#         mieCategorie = []
+#
+#     return render(request,'sentieriApp/selezionaCategorie.html', {'categorie' : categorie, 'mieCategorie' : mieCategorie})
+#     # return render(request, 'sentieriApp/selezionaCategorie.html')
 
 
 def dettagliSentiero(request, idSentiero):
@@ -103,24 +119,35 @@ def dettagliSentiero(request, idSentiero):
         sentiero = cursor.fetchone()
     if sentiero.__len__() == 0:
         raise Http404
-    form = SentieroPreferito(request.GET or None)
-    if request.method == "GET":
-        if form.is_valid():
-            check = form.cleaned_data.get('preferito')
-            if check:
-                preferito = Preferito(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero))
-                preferito.save()
-            else:
-                preferito = Preferito.objects.get(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero))
-                preferito.delete()
 
-            return redirect("index")
+    form = SentieroPreferito(request.POST or None)
+
+    if request.user.is_authenticated:
+        if request.method == "POST":
+            if form.is_valid():
+                if "add_preferito" in request.POST:
+                    preferito = Preferito(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero))
+                    preferito.save()
+                    res = False
+                if "remove_preferito" in request.POST:
+                    res = True
+                    preferito = Preferito.objects.get(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero))
+                    preferito.delete()
+
+                return redirect("dettagliSentiero", idSentiero=idSentiero)
+
         else:
             if Preferito.objects.filter(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero)):
-                form = SentieroPreferito(initial={'preferito': True})
+                res = True
             else:
-                form = SentieroPreferito(initial={'preferito': False})
-    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero, "commenti": commenti_di_un_sentiero(idSentiero), 'form': form})
+                res = False
+    else:
+        res = False
+
+    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero,
+                                                                 "commenti": commenti_di_un_sentiero(idSentiero),
+                                                                 'preferito': res})
+
 
 
 def dettagliUtente(request, idUtente):
@@ -158,8 +185,9 @@ def creazioneAccount(request):
                 interessi = Interessi(categoria=c, user=request.user)
                 interessi.save()
             return redirect("index")
-        else:
-            form = CreazioneAccount()
+    else:
+        form = CreazioneAccount()
+
     return render(request, 'registration/creazioneAccount.html', {"form" : form})
 
 def modificaAccount(request):

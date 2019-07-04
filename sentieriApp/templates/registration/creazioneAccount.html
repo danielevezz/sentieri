@@ -5,13 +5,13 @@
         {% if form.errors %}
             {% for field in form %}
                 {% for error in field.errors %}
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger col-md-8">
                         <strong>{{ error|escape }}</strong>
                     </div>
                 {% endfor %}
             {% endfor %}
             {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
+                <div class="alert alert-danger col-md-8">
                     <strong>{{ error|escape }}</strong>
                 </div>
             {% endfor %}
@@ -19,12 +19,40 @@
         <form action="{% url "creazioneNuovoAccount" %}" method="post">
 
             {% csrf_token %}
-            <div class="form-group">
-                {{ form.as_p }}
-            </div>
-                <input type="submit" class="btn btn-primary" value="Crea"/>
+
+            {% for field in form %}
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-8">
+                            {{ field.label_tag }} {{ field }}
+                        </div>
+                        <div class="col-md-4">
+                        </div>
+                    </div>
+
+
+                </div>
+            {% endfor %}
+                <input type="submit" class="btn btn-primary col-md-8" value="Crea"/>
         </form>
     {% else %}
         <p>Sei gia autenticato</p>
     {% endif %}
+    <script>
+        tags = document.getElementsByTagName("input")
+        for (i = 0; i< tags.length; i++) {
+            tags[i].classList.add("form-control")
+        }
+    </script>
 {% endblock %}
+
+<!--
+
+    first_name = forms.CharField(max_length=30, required=True)
+    last_name = forms.CharField(max_length=30, required=True)
+    sesso = forms.CharField(max_length=1, widget=forms.Select(choices=OPZIONI_SESSO))
+    eta = forms.IntegerField(min_value=1, max_value=150)
+    residenza = forms.ModelChoiceField(queryset=Citta.objects.all())
+    categorie = forms.ModelMultipleChoiceField(required=False, queryset=Categoria.objects.all())
+
+-->

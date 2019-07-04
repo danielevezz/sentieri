@@ -1,8 +1,7 @@
 from django import forms
 from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm
-from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, DIFFICOLTA_CAI, Categoria
-from .queries import mie_categorie
+from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, DIFFICOLTA_CAI, Categoria, Preferito
 
 import datetime
 
@@ -48,14 +47,13 @@ class InserisciEsperienza(ModelForm):
 
 class Filtro(Form):
 
-
     CATEG = Categoria.objects.all()
     CATEG = [c.nome for c in CATEG]
-    CATEG += ["Mie categorie"]
+    CATEG += ["Tutte le categorie"]
 
     SCELTE_CATEGORIA = tuple(zip(CATEG, CATEG))
 
-    categoria = forms.CharField(max_length=3, widget=forms.Select(choices=SCELTE_CATEGORIA))
+    categoria = forms.CharField(max_length=max([x.__len__() for x in CATEG]), widget=forms.Select(choices=SCELTE_CATEGORIA), required=False)
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo", required=False) #Metri
     ciclico = forms.BooleanField(required=False)
@@ -63,6 +61,11 @@ class Filtro(Form):
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
 
 
+    def crea_categ(self, str):
+        CATEG = Categoria.objects.all()
+        CATEG = [c.nome for c in CATEG]
+        CATEG += [str]
+        return CATEG
 
 
 class SentieroPreferito(ModelForm):
