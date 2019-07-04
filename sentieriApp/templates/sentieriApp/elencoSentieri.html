@@ -8,11 +8,21 @@
         {% for s in sentieri %}
             <li><a href="{% url "dettagliSentiero" idSentiero=s.id%}">{{ s.titolo }}</a> </li>
         {% endfor %}
-        <li><a href="{% url "elencoSentieri" %}?categorie={{ categorie }}&filtro=1,pofff">Filtro</a></li>
     {% else %}
         <li>Non ci sono sentieri con questi filtri</li>
     {% endif %}
-
-
 </ul>
+
+<hr>
+<h4 class="text-muted">Filtri</h4>
+<form action="{% url "elencoSentieri" %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary" value="Filtra"/>
+</form>
+
+    <div class="alert-warning">
+        {{ errors }}
+    </div>
+
 {% endblock %}

@@ -1,7 +1,9 @@
 from django import forms
 from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm
-from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, Categoria, Interessi, Preferito
+from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, DIFFICOLTA_CAI, Categoria
+from .queries import mie_categorie
+
 import datetime
 
 
@@ -30,6 +32,26 @@ class InserisciEsperienza(ModelForm):
     class Meta:
         model = EsperienzaPersonale
         fields = ('sentiero', 'voto', 'difficolta', 'data', "commento")
+
+
+class Filtro(Form):
+
+
+    CATEG = Categoria.objects.all()
+    CATEG = [c.nome for c in CATEG]
+    CATEG += ["Mie categorie"]
+
+    SCELTE_CATEGORIA = tuple(zip(CATEG, CATEG))
+
+    categoria = forms.CharField(max_length=3, widget=forms.Select(choices=SCELTE_CATEGORIA))
+    durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima", required=False) #Ore
+    dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo", required=False) #Metri
+    ciclico = forms.BooleanField(required=False)
+    difficolta = forms.CharField(max_length=3, widget=forms.Select(\
+        choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
+
+
+
 
 class SentieroPreferito(ModelForm):
     preferito = forms.BooleanField(required=False)

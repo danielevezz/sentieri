@@ -2,18 +2,20 @@
 
 {% block body %}
 
+    <body>
+    <h3>Seleziona Categorie</h3>
+    <ul>
+        {% for c in categorie %}
+            <li><a href="{% url "elencoSentieri" %}?categorie={{ c }}">{{ c }} </a></li>
+        {% endfor %}
 
-<body>
-<h3>Seleziona Categorie</h3>
-<ul>
-    {% for c in categorie %}
-        <li><a href="{% url "elencoSentieri" %}?categorie={{ c }}">{{ c }} </a></li>
-    {% endfor %}
+        {% if user.is_authenticated %}
+            {% if mieCategorie %}
+                <li><a href="{% url 'elencoSentieri' %}?categorie={{ mieCategorie }}">Mie Categorie </a></li>
+            {% endif %}
+        {%  endif %}
+    </ul>
 
-    {% if user.is_authenticated %}
-        {% if mieCategorie %}
-            <li><a href="{% url 'elencoSentieri' %}?categorie={{ mieCategorie }}">Mie Categorie </a></li>
-        {% endif %}
-    {%  endif %}
-</ul>
+
+
 {% endblock %}

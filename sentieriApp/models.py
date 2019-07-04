@@ -181,9 +181,11 @@ class Commento(models.Model):
         db_table = "commento"
 
 
+DIFFICOLTA_CAI = (("T", "Turistico"), ("E", "Escursionistico"), ("EE", "Escursionisti esperti"), ("EEA", "Escursionisti esperti con attrezzatura"))
+
+
 class Difficolta(models.Model):
-    diffs = (("T", "Turistico"), ("E", "Escursionistico"), ("EE", "Escursionisti esperti"), ("EEA", "Escursionisti esperti con attrezzatura"))
-    nome = models.CharField(max_length=3, choices=diffs, default="E", primary_key=True)
+    nome = models.CharField(max_length=3, choices=DIFFICOLTA_CAI, default="E", primary_key=True)
 
     def __str__(self):
         return self.nome
