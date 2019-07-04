@@ -1,6 +1,7 @@
 from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria
 from django.db import connection
 
+
 # Queries
 
 def isCiclico(idSentiero):
@@ -56,7 +57,42 @@ def utentePubblico(idUtente):
     return row
 
 
+def luoghi_di_un_sentiero(idSentiero):
+    query = """select luogo.*
+                from tappa
+                join luogo
+                on luogo.id = tappa.luogo_id
+                where tappa.sentiero_id =""" + str(idSentiero)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+
+def informazioni_luogo(idLuogo):
+    query = """select luogo.nome as nome_luogo, luogo.descrizione as descrizione_luogo,
+                luogo.sito, tipologia_luogo.nome as nome_tipo, tipologia_luogo.descrizione as descrizione_tipo, 
+                punto_geografico.id as ptoGeografico_id
+                from luogo
+                join tipologia_luogo
+                on luogo."tipoLuogo_id"= tipologia_luogo.id
+                join punto_geografico
+                on luogo."ptoGeografico_id" = punto_geografico.id
+                where luogo.id =""" + str(idLuogo)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        row = cursor.fetchone()
+    return row
+
+
 def utenti_popolari(numEsperienze):
+    media = """ select avg (numeroEsperienze) 
+                    from 
+    					    (select count(esperienza.id) as numeroEsperienze
+    						from esperienza
+    						join utente on utente.id = esperienza.user_id
+    						group by utente.id) as foo"""
+
     query = """
                 select utente.id, utente.username
                 from utente
@@ -65,10 +101,11 @@ def utenti_popolari(numEsperienze):
                 on esperienza.user_id = utente.id
 
                 group by utente.id
-                having count(distinct esperienza.id) >""" + str(numEsperienze)
+                having count(distinct esperienza.id) > (""" + media + ")"
+
     with connection.cursor() as cursor:
         cursor.execute(query)
-        table = cursor.fetchone()
+        table = cursor.fetchall()
     return table
 
 
@@ -118,7 +155,7 @@ def sentieri_effettuati(idUser):
 
 def commenti_di_un_utente(idUser):
     query = """
-            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo
+            select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo, esperienza.voto
             from esperienza
 
             join commento
