@@ -11,7 +11,8 @@ urlpatterns = [
     path("selezionaCategorie/", views.selezionaCategorie, name="selezionaCategorie"),
     path("elencoSentieri/", views.elencoSentieri, name="elencoSentieri"),
     path("elencoSentieriDiUtente/<int:idUtente>/", views.elencoSentieriDiUtente, name="elencoSentieriDiUtente"),
-    path("commentiDiUtente/<int:idUtente>/", views.commentiDiUtente, name="commentiDiUtente")
+    path("commentiDiUtente/<int:idUtente>/", views.commentiDiUtente, name="commentiDiUtente"),
+    path("modificaAccount", views.modificaAccount, name="modificaAccount")
 ]
 
 urlpatterns += [
