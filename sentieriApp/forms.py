@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm
-from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, Categoria
+from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, Categoria, Interessi, Preferito
 import datetime
 
 
@@ -30,3 +30,10 @@ class InserisciEsperienza(ModelForm):
     class Meta:
         model = EsperienzaPersonale
         fields = ('sentiero', 'voto', 'difficolta', 'data', "commento")
+
+class SentieroPreferito(ModelForm):
+    preferito = forms.BooleanField(required=False)
+
+    class Meta:
+        model = Preferito
+        fields = ('preferito',)

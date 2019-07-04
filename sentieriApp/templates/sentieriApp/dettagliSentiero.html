@@ -56,5 +56,33 @@
             </div>
         {% endfor %}
 
+    {% if user.is_authenticated %}
+    {% if form.errors %}
+        {% for field in form %}
+            {% for error in field.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ error|escape }}</strong>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+   <form method="GET">
+
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+        </div>
+            <input type="submit" value="Submit" />
+    </form>
+
+    {% endif %}
+
+
 
 {% endblock %}

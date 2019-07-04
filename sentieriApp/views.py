@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi
-from .forms import CreazioneAccount, InserisciEsperienza
+from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi, Preferito
+from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
 from django.db import connection
@@ -77,7 +77,24 @@ def dettagliSentiero(request, idSentiero):
         sentiero = cursor.fetchone()
     if sentiero.__len__() == 0:
         raise Http404
-    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero, "commenti": commenti_di_un_sentiero(idSentiero)})
+    form = SentieroPreferito(request.GET or None)
+    if request.method == "GET":
+        if form.is_valid():
+            check = form.cleaned_data.get('preferito')
+            if check:
+                preferito = Preferito(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero))
+                preferito.save()
+            else:
+                preferito = Preferito.objects.get(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero))
+                preferito.delete()
+
+            return redirect("index")
+        else:
+            if Preferito.objects.filter(user=request.user, sentiero=Sentiero.objects.get(id=idSentiero)):
+                form = SentieroPreferito(initial={'preferito': True})
+            else:
+                form = SentieroPreferito(initial={'preferito': False})
+    return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero, "commenti": commenti_di_un_sentiero(idSentiero), 'form': form})
 
 
 def dettagliUtente(request, idUtente):
