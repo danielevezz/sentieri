@@ -92,7 +92,8 @@ def elencoSentieri(request):
                                                                'errors': filtro.errors})
 
 
-
+def elencoUtenti(request):
+    pass
 
 
 
