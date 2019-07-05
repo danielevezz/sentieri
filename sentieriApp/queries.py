@@ -94,13 +94,11 @@ def utenti_popolari():
     						group by utente.id) as foo"""
 
     query = """
-                select utente.id, utente.username, count(esperienza.id) as esperienze, count(commento.id) as commenti
+                select utente.id, utente.username, count(esperienza.id) as esperienze
                 from utente
 
                 join esperienza
                 on esperienza.user_id = utente.id
-                join commento
-                on commento.esperienza_id = esperienza.id
 
                 group by utente.id
                 having count(distinct esperienza.id) >= (""" + media + ")"
@@ -112,13 +110,12 @@ def utenti_popolari():
 
 def ordina_utenti_popolari():
     query = """
-                 select utente.id, utente.username, count(esperienza.id) as esperienze, count(commento.id) as commenti
+                 select utente.id, utente.username, count(esperienza.id) as esperienze
                 from utente
 
                 join esperienza
                 on esperienza.user_id = utente.id
-                join commento
-                on commento.esperienza_id = esperienza.id
+                
 				group by utente.id
                 order by esperienze desc
                """
@@ -130,13 +127,12 @@ def ordina_utenti_popolari():
 
 def ordina_utenti_username():
     query = """
-                 select utente.id, utente.username, count(esperienza.id) as esperienze, count(commento.id) as commenti
+                 select utente.id, utente.username, count(esperienza.id) as esperienze
                 from utente
 
                 join esperienza
                 on esperienza.user_id = utente.id
-                join commento
-                on commento.esperienza_id = esperienza.id
+            
 				group by utente.id
                 order by username
                """
@@ -147,16 +143,26 @@ def ordina_utenti_username():
     return table
 
 def ordina_utenti_commenti():
+    commenti ="""select utente.id as identificatore, count(commento.id) as commenti
+							from utente
+							 join esperienza
+							on esperienza.user_id = utente.id
+							join commento
+							on commento.esperienza_id = esperienza.id
+							group by utente.id
+							order by commenti"""
     query = """
-                select utente.id, utente.username, count(esperienza.id) as esperienze, count(commento.id) as commenti
-                from utente
+                select utente.id, utente.username, count(esperienza.id) as esperienze
+							from ("""+str(commenti)+""")as foo
+
+                join utente
+				on foo.identificatore = utente.id
 
                 join esperienza
-                on esperienza.user_id = utente.id
-                join commento
-                on commento.esperienza_id = esperienza.id
-				group by utente.id
-                order by commenti desc 
+                on esperienza.user_id = foo.identificatore
+               
+				group by foo.commenti, utente.id
+				order by foo.commenti desc
                """
 
     with connection.cursor() as cursor:
