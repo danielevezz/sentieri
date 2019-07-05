@@ -57,6 +57,7 @@ class Filtro(Form):
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo", required=False) #Metri
     ciclico = forms.BooleanField(required=False)
+    media_alta = forms.BooleanField(required=False, label="Media voti più alta")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
 
