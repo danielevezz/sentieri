@@ -44,6 +44,12 @@ class InserisciEsperienza(ModelForm):
         model = EsperienzaPersonale
         fields = ('sentiero', 'voto', 'difficolta', 'data', "commento")
 
+class FiltroUtenti(Form):
+    utentiPopolari = forms.BooleanField(required=False)
+    ordina = forms.CharField(required=False, widget=forms.Select(choices=[("Nome","Nome"), ("Esperienze", "Esperienza"), ("Commenti", "Commenti")]),)
+
+
+
 
 class Filtro(Form):
 

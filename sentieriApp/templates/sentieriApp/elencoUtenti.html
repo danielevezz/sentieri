@@ -1,0 +1,28 @@
+{% extends "sentieriApp/blocks/template.html" %}
+
+{% block body %}
+<body>
+<h3>Sentieri</h3>
+<ul>
+    {% if utenti %}
+        {% for u in utenti %}
+            <li><a href="{% url "areaPersonale" idUtente=u.0%}">{{ u.1 }}</a> </li>
+        {% endfor %}
+    {% else %}
+        <li>Non ci sono utenti con questi filtri</li>
+    {% endif %}
+</ul>
+
+<hr>
+<h4 class="text-muted">Filtri</h4>
+<form action="{% url "elencoUtenti" %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary" value="Filtra"/>
+</form>
+
+    <div class="alert-warning">
+        {{ errors }}
+    </div>
+
+{% endblock %}

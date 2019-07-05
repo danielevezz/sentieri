@@ -3,7 +3,7 @@ from .models import Sentiero , PuntoGeografico, Commento, Categoria
 from .forms import CreazioneAccount, InserisciEsperienza, Filtro
 from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi, Preferito,\
     Difficolta
-from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito, ModificaAccount
+from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito, ModificaAccount, FiltroUtenti
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
 from django.db import connection
@@ -93,7 +93,36 @@ def elencoSentieri(request):
 
 
 def elencoUtenti(request):
-    pass
+    filtro = FiltroUtenti(request.POST)
+    if request.method == 'POST':
+        if filtro.is_valid():
+
+            dati = filtro.cleaned_data
+            popolari = dati.get('utentiPopolari')
+            ordina = dati.get("ordina")
+
+            if ordina=="Nome":
+                utenti = ordina_utenti_username()
+            if ordina=="Commenti":
+                utenti = ordina_utenti_commenti()
+            if ordina=="Esperienze":
+                utenti = ordina_utenti_popolari()
+
+            if popolari:
+                utentiP= utenti_popolari()
+                print(utentiP)
+
+                utenti= list(set(utenti) & set(utentiP))
+
+            return render(request, 'sentieriApp/elencoUtenti.html',
+                          {'utenti': utenti, 'form': filtro})
+
+    else:
+        filtro = FiltroUtenti()
+
+
+    utenti = ordina_utenti_username()
+    return render(request, 'sentieriApp/elencoUtenti.html', {'utenti': utenti, 'form': filtro})
 
 
 
@@ -104,22 +133,6 @@ def commentiDiUtente(request, idUtente):
     return render(request, 'sentieriApp/commentiDiUtente.html', {'commenti' : commenti_di_un_utente(idUtente)})
 
 
-
-# def selezionaCategorie(request):
-#
-#
-#     categorie = Categoria.objects.all()
-#     categorie = [c.nome for c in categorie]
-#     #
-#     if request.user.is_authenticated:
-#         mieCategorie = mie_categorie(request.user.id)
-#         mieCategorie = [i[0] for i in mieCategorie]
-#         mieCategorie = ",".join(mieCategorie)
-#     else:
-#         mieCategorie = []
-#
-#     return render(request,'sentieriApp/selezionaCategorie.html', {'categorie' : categorie, 'mieCategorie' : mieCategorie})
-#     # return render(request, 'sentieriApp/selezionaCategorie.html')
 
 
 def dettagliSentiero(request, idSentiero):
