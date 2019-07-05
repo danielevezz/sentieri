@@ -66,13 +66,13 @@ def elencoSentieri(request):
 
             sentieri = sentieri.filter(difficolta__in=diff)
 
-            if media_alta:
-                sentieri_voti= sentieri_media_voti_piu_alta()
-                sentieri_voti_ids=[]
-                for item in sentieri_voti:
-                    sentieri_voti_ids.append(item[0][1])
-
-                sentieri= sentieri.filter(id__in=sentieri_voti_ids)
+            # if media_alta:
+            #     sentieri_voti= sentieri_media_voti_piu_alta_di(str(media_alta))
+            #     sentieri_voti_ids=[]
+            #     for item in sentieri_voti:
+            #         sentieri_voti_ids.append(str(item[0][1]))
+            #
+            #     sentieri= sentieri.filter(id__in=sentieri_voti_ids)
 
             print(sentieri.query)
 
