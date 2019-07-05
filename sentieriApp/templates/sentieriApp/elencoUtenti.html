@@ -4,9 +4,10 @@
 <body>
 <h3>Sentieri</h3>
 <ul>
+<!-- utente.id, utente.username, esperienze, commenti -->
     {% if utenti %}
         {% for u in utenti %}
-            <li><a href="{% url "areaPersonale" idUtente=u.0%}">{{ u.1 }}</a> </li>
+            <li><a href="{% url "areaPersonale" idUtente=u.0%}">{{ u.1 }}</a> Esperienze: {{ u.2 }} </li>
         {% endfor %}
     {% else %}
         <li>Non ci sono utenti con questi filtri</li>
