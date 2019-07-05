@@ -85,7 +85,7 @@ def informazioni_luogo(idLuogo):
     return row
 
 
-def utenti_popolari(numEsperienze):
+def utenti_popolari():
     media = """ select avg (numeroEsperienze) 
                     from 
     					    (select count(esperienza.id) as numeroEsperienze
@@ -102,6 +102,22 @@ def utenti_popolari(numEsperienze):
 
                 group by utente.id
                 having count(distinct esperienza.id) > (""" + media + ")"
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+def ordina_utenti_popolari():
+    query = """
+                select utente.id, utente.username, count(esperienza.id) as esperienze
+                from utente
+
+                join esperienza
+                on esperienza.user_id = utente.id
+				group by utente.id
+                order by esperienze desc
+               """
 
     with connection.cursor() as cursor:
         cursor.execute(query)
