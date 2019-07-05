@@ -20,9 +20,9 @@
     <span class="navbar-text">
         {% if user.is_authenticated %}
             <div class="dropdown text-justify">
-                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                <a class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
                         data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">{{ request.user.username }}</button>
+                        aria-haspopup="true" aria-expanded="false">{{ request.user.username }}</a>
                 <div style="min-width: 125px" class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
                     <a class="dropdown-item text-dark" href="{% url "areaPersonale" idUtente=request.user.id %}">Profilo</a>
                     <a class="dropdown-item text-dark" href="{% url "modificaAccount" %}">Modifica</a>

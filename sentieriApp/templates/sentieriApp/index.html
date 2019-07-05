@@ -1,11 +1,49 @@
-{% extends "sentieriApp/blocks/template.html" %}
-
-{% block body %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentieri</title>
+    <link rel="stylesheet" href="{% static "sentieriApp/css/bootstrap.css" %}">
+    <style>
+        .jumbotron {
+            background-image: url("https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1955&q=80");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>
+</head>
 <body>
-<h3>Sentieri</h3>
-<ul>
-    {% for s in sentieri %}
-        <li><a href="{% url "dettagliSentiero" idSentiero=s.id%}">{{ s.titolo }}</a></li>
-    {% endfor %}
-</ul>
-{% endblock %}
+    {% include "sentieriApp/blocks/navbar.html" %}
+    <div class="container-fluid mt-3">
+        <div class="jumbotron">
+            <h1 class="display-5 text-white">Scopri la tua prossima esperienza!</h1>
+            <p class="lead text-white">{% lorem %}</p>
+            <div class="text-center"><a class="btn btn-primary btn-lg" href="{% url "elencoSentieri" %}" role="button">Cerca!</a></div>
+        </div>
+    </div>
+    <div class="container">
+        <h1>I nostri sentieri</h1>
+        <h5>Sentieri più popolari</h5>
+        <ol>
+            {% for s in sentieriPopolari %}
+                <li><a href="{% url "dettagliSentiero" idSentiero=s.0%}">{{ s.1 }}</a> <span class="badge badge-secondary ml-1">{{ s.19 }}</span> </li>
+            {% endfor %}
+        </ol>
+
+        <h5>Sentieri più votati</h5>
+        <ol>
+            {% for s in sentieriVotati %}
+                <li><a href="{% url "dettagliSentiero" idSentiero=s.0%}">{{ s.1 }}</a> <span class="badge badge-secondary ml-1">{{ s.19 }}</span></li>
+            {% endfor %}
+        </ol>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+      crossorigin="anonymous">
+    </script>
+    <script src="{% static "sentieriApp/js/bootstrap.bundle.js" %}" crossorigin="anonymous"></script>
+</body>
+</html>

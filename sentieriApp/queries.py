@@ -138,6 +138,20 @@ def sentieri_media_voti_piu_alta():
         table = cursor.fetchall()
     return table
 
+def sentieri_piu_percorsi():
+    query = """ select * from dati_sentiero order by partecipanti desc limit 5"""
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+def sentieri_piu_votati():
+    query = """  select *  from dati_sentiero order by mediavoti desc limit 5"""
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
 
 def sentieri_media_voti_piu_alta_di(media):
     media = str(media)

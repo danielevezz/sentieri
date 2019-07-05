@@ -15,7 +15,7 @@ from .queries import *
 def index(request):
     query = "select * from sentiero "
     sentieri = Sentiero.objects.raw(query)
-    context = {'sentieri' : sentieri}
+    context = {'sentieri' : sentieri, "sentieriPopolari": sentieri_piu_percorsi(), "sentieriVotati": sentieri_piu_votati()}
     return render(request,'sentieriApp/index.html', context)
 
 
