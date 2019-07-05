@@ -17,12 +17,26 @@
 <h4 class="text-muted">Filtri</h4>
 <form action="{% url "elencoSentieri" %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" class="btn btn-primary" value="Filtra"/>
+    {% for field in form %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-8">
+                    {{ field.label_tag }} {{ field }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-primary col-md-8" value="Filtra"/>
 </form>
 
     <div class="alert-warning">
         {{ errors }}
     </div>
-
+    <script>
+        tags = document.getElementsByTagName("input")
+        for (i = 0; i< tags.length; i++) {
+            if (tags[i].type != "checkbox")
+                tags[i].classList.add("form-control")
+        }
+    </script>
 {% endblock %}
