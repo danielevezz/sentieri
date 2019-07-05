@@ -16,17 +16,19 @@
             <span class="sr-only">(current)</span>
             </a>
         </li>
-        {% if user.is_authenticated %}
-            <li class="nav-item">
-            <a class="nav-link" href="{% url "logout" %}">Logout
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
-        {% endif %}
     </ul>
-    <span class="navbar-text white-text">
+    <span class="navbar-text">
         {% if user.is_authenticated %}
-            <a href="{% url "areaPersonale" idUtente=request.user.id %}"> {{ request.user.username }}</a>
+            <div class="dropdown text-justify">
+                <button class="btn btn-dark dropdown-toggle" type="button" id="dropdownMenuButton"
+                        data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">{{ request.user.username }}</button>
+                <div style="min-width: 125px" class="dropdown-menu" aria-labelledby="dropdownMenuButton" >
+                    <a class="dropdown-item text-dark" href="{% url "areaPersonale" idUtente=request.user.id %}">Profilo</a>
+                    <a class="dropdown-item text-dark" href="{% url "modificaAccount" %}">Modifica</a>
+                    <a class="dropdown-item text-dark" href="{% url "logout" %}">Esci</a>
+                </div>
+            </div>
         {% else %}
             <a href="{% url "login" %}">Login</a>
         {% endif %}
