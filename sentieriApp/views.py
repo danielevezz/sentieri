@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
 from django.db import connection
 from .queries import *
+from . import views
 
 # Una view in postgres
 # create view as ...
@@ -102,6 +103,25 @@ def elencoSentieri(request):
                     sentieri_voti_ids.append(id)
 
                 sentieri= sentieri.filter(id__in=sentieri_voti_ids)
+
+            if ordine=="Voto":
+                sentieri_ordinati = ordina_sentieri_per_voto()
+                sentieri_ids = []
+                for item in sentieri_ordinati:
+                    id = item[0]
+                    sentieri_ids.append(id)
+                sentieri = sentieri.filter(id__in=sentieri_ids)
+            elif ordine=="Partecipanti":
+                sentieri_ordinati = ordina_sentieri_per_percorrenze()
+                sentieri_ids = []
+                for item in sentieri_ordinati:
+                    id = item[0]
+                    sentieri_ids.append(id)
+                sentieri = sentieri.filter(id__in=sentieri_ids)
+            else:
+                sentieri = sentieri.order_by('titolo')
+
+
 
             print(sentieri.query)
 
