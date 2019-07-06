@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Sentiero , PuntoGeografico, Commento, Categoria
 from .forms import CreazioneAccount, InserisciEsperienza, Filtro
 from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi, Preferito,\
-    Difficolta
+    Difficolta, Citta
 from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito, ModificaAccount, FiltroUtenti
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
@@ -39,6 +39,11 @@ def elencoSentieri(request):
             ciclico = dati.get("ciclico")
             difficolta = dati.get("difficolta")
             media_alta = dati.get("media_alta")
+            titolo = dati.get("titolo")
+            preferiti = dati.get("preferiti")
+            ordine = dati.get("ordine")
+            miaCitta = dati.get("miaCitta")
+            utentiMiaCitta = dati.get("utentiMiaCitta")
 
             print(difficolta)
 
@@ -66,13 +71,37 @@ def elencoSentieri(request):
 
             sentieri = sentieri.filter(difficolta__in=diff)
 
-            # if media_alta:
-            #     sentieri_voti= sentieri_media_voti_piu_alta_di(str(media_alta))
-            #     sentieri_voti_ids=[]
-            #     for item in sentieri_voti:
+            sentieri = sentieri.filter(titolo__contains=titolo)
+
+            if preferiti:
+                sentieri = sentieri.filter(preferito__user_id=request.user.id)
+
+            # if miaCitta:
+            #     residenza =Utente.objects.select_related("residenza").only('id','residenza_id')
+            #     residenza = residenza.filter(id=request.user.id).only('residenza_id')
+            #     print(residenza.query)
+            #     print(residenza)
+            #     print(residenza[0])
+            #     sent = sentieri_della_mia_citta(residenza[0])
+            #     sentieri_voti_ids = []
+            #     for item in sent:
             #         sentieri_voti_ids.append(str(item[0][1]))
             #
             #     sentieri= sentieri.filter(id__in=sentieri_voti_ids)
+
+            # if utentiMiaCitta:
+            #     print()
+
+
+
+            if media_alta:
+                sentieri_voti= sentieri_media_voti_piu_alta_di(str(media_alta))
+                sentieri_voti_ids=[]
+                for item in sentieri_voti:
+                    id = item[0]
+                    sentieri_voti_ids.append(id)
+
+                sentieri= sentieri.filter(id__in=sentieri_voti_ids)
 
             print(sentieri.query)
 
@@ -81,7 +110,7 @@ def elencoSentieri(request):
 
     else:
         filtro = Filtro(initial={'difficolta': "ALL",
-                                 'categoria': "Escursionismo",
+                                 'categoria': "Tutte le categorie",
                                  'durataMax': 50,
                                  'dislivelloMax': 50000,
                                  'ciclico': False})

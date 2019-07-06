@@ -46,7 +46,7 @@ class InserisciEsperienza(ModelForm):
 
 class FiltroUtenti(Form):
     utentiPopolari = forms.BooleanField(required=False)
-    ordina = forms.CharField(required=False, widget=forms.Select(choices=[("Nome","Nome"), ("Esperienze", "Esperienza"), ("Commenti", "Commenti")]),)
+    ordina = forms.CharField(required=False, widget=forms.Select(choices=[("Nome","Nome"), ("Esperienze", "Esperienza"), ("Commenti", "Commenti")]))
 
 
 
@@ -67,11 +67,11 @@ class Filtro(Form):
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
-    lunghezzaMax = forms.CharField(required=False, label="Lunghezza massima")
-    preferiti = forms.CharField(required=False, label="Solo i miei percorsi preferiti")
-    ordine = forms.CharField(required=False, label="Ordina per")
-    miaCitta = forms.CharField(required=False, label="Solo percorsi della mia città")
-    utentiMiaCitta = forms.CharField(required=False, label="Solo percorsi effettuati da utenti della mia città")
+    lunghezzaMax = forms.IntegerField(min_value=0, max_value=200, required=False, label="Lunghezza massima")
+    preferiti = forms.BooleanField(required=False, label="Solo i miei percorsi preferiti")
+    ordine = forms.CharField(required=False, label="Ordina per", widget=forms.Select(choices=[("Titolo","Titolo"), ("Voto", "Voto"), ("Partecipanti", "Partecipanti")]))
+    miaCitta = forms.BooleanField(required=False, label="Solo percorsi della mia città")
+    utentiMiaCitta = forms.BooleanField(required=False, label="Solo percorsi effettuati da utenti della mia città")
 
 
 
