@@ -18,7 +18,15 @@
 <h4 class="text-muted">Filtri</h4>
 <form action="{% url "elencoUtenti" %}" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {% for field in form %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-8">
+                    {{ field.label_tag }} {{ field }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
     <input type="submit" class="btn btn-primary col-md-8" value="Filtra"/>
 </form>
 

@@ -198,6 +198,10 @@ def sentieri_piu_votati():
         table = cursor.fetchall()
     return table
 
+
+def sentieri_partenza_pto_geog(idPtoGeog):
+    return Sentiero.objects.filter(ptoGeograficoPartenza=idPtoGeog)
+
 def ordina_sentieri_per_voto():
     query = """  select *  from dati_sentiero order by mediavoti desc"""
     with connection.cursor() as cursor:

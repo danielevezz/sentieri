@@ -5,4 +5,12 @@
     <span>{{ punto.latitudine }}</span>
     <span>{{ punto.longitudine }}</span>
     <p>{{ punto.descrizione }}</p>
+    {% if sentieri %}
+        <h4>Sentieri che partono da qui</h4>
+        <ul>
+        {% for s in sentieri %}
+            <li><a href="{% url "dettagliSentiero" idSentiero=s.id%}">{{ s.titolo }}</a> </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
