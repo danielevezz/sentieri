@@ -121,12 +121,20 @@ def elencoSentieri(request):
             else:
                 sentieri = sentieri.order_by('titolo')
 
-
-
             print(sentieri.query)
 
+            ids = []
+            for s in sentieri:
+                ids.append(s.id)
+
+            if ids:
+                ids = ','.join(map(str, ids))
+                dati_sentieri = info_complete_sentieri_id(ids)
+            else:
+                dati_sentieri = []
+
             return render(request, 'sentieriApp/elencoSentieri.html',
-                      {'sentieri': sentieri, 'form': filtro})
+                      {'sentieri': dati_sentieri, 'form': filtro})
 
     else:
         filtro = Filtro(initial={'difficolta': "ALL",
@@ -135,9 +143,9 @@ def elencoSentieri(request):
                                  'dislivelloMax': 50000,
                                  'ciclico': False})
 
-    sentieri = Sentiero.objects.all()
+    dati_sentieri = info_complete_sentieri()
     print("mlem")
-    return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri': sentieri, 'form': filtro,
+    return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri': dati_sentieri, 'form': filtro,
                                                                'errors': filtro.errors})
 
 

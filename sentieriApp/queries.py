@@ -383,7 +383,16 @@ def sentieri_di_categorie_preferite(idUser):
     return table
 
 
-def dati_sentiero():
+def info_complete_sentieri_id(idSentieri):
+
+    query = "select * from dati_sentiero where id in (" + idSentieri + ")"
+    print(query)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
+def info_complete_sentieri():
     query = """
                 Select Distinct 
                 sentiero.id,
@@ -426,4 +435,8 @@ def dati_sentiero():
                 on commento.esperienza_id = esperienza.id
 
                 group by (sentiero.id, categoria.nome, partenza.nome, arrivo.nome )"""
-    return Sentiero.objects.raw(query)
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
