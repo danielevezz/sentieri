@@ -19,7 +19,7 @@ class Sentiero(models.Model):
     ciclico = models.BooleanField(default=False)        # Se il sentiero è ciclico o meno
     linkMappa = models.URLField(blank=True, default="")             # Link alla mappa del percorso (opzionale)
     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE, related_name="categoria", default="Camminata")
-    lunghezza = models.IntegerField(blank=True, default=0)
+    lunghezza = models.FloatField(blank=True, default=0.)
 
 
     # L'id viene generato automaticamente da Django se non imposto altra chiave primaria
