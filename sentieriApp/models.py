@@ -19,6 +19,7 @@ class Sentiero(models.Model):
     ciclico = models.BooleanField(default=False)        # Se il sentiero è ciclico o meno
     linkMappa = models.URLField(blank=True, default="")             # Link alla mappa del percorso (opzionale)
     categoria = models.ForeignKey('Categoria', on_delete=models.CASCADE, related_name="categoria", default="Camminata")
+    lunghezza = models.IntegerField(blank=True, default=0)
 
 
     # L'id viene generato automaticamente da Django se non imposto altra chiave primaria
@@ -62,7 +63,6 @@ class PuntoGeografico(models.Model):
         verbose_name = 'Punto Geografico'
         verbose_name_plural = 'Punti Geografici'
         db_table = 'punto_geografico'
-
 
 
 class Nazione(models.Model):
@@ -120,6 +120,7 @@ class Interessi(models.Model):
         return str(self.categoria.nome)+" - "+str(self.user)
 
     class Meta:
+        unique_together = (('categoria','user'),)
         verbose_name = 'Interesse'
         verbose_name_plural = 'Interessi'
         db_table = "interesse"
@@ -133,6 +134,7 @@ class Tappa(models.Model):
         return str(self.luogo.nome)+" - "+str(self.sentiero.titolo)
 
     class Meta:
+        unique_together = (("luogo", 'sentiero'),)
         verbose_name = 'Tappa'
         verbose_name_plural = 'Tappe'
         db_table = "tappa"
@@ -207,6 +209,7 @@ class EsperienzaPersonale(models.Model):
         return str(self.user) + " - " + str(self.sentiero)
 
     class Meta:
+        unique_together = (('sentiero', 'user', 'data_esperienza'),)
         verbose_name = 'Esperienza personale'
         verbose_name_plural = 'Esperienze personali'
         db_table = "esperienza"
@@ -220,6 +223,7 @@ class Preferito(models.Model):
         return str(self.sentiero.titolo)+" - "+str(self.user)
 
     class Meta:
+        unique_together = (('user', 'sentiero'),)
         verbose_name = 'Preferito'
         verbose_name_plural = 'Preferiti'
         db_table = "preferito"
