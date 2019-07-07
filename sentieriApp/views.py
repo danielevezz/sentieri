@@ -77,21 +77,23 @@ def elencoSentieri(request):
             if preferiti:
                 sentieri = sentieri.filter(preferito__user_id=request.user.id)
 
-            # if miaCitta:
-            #     residenza =Utente.objects.select_related("residenza").only('id','residenza_id')
-            #     residenza = residenza.filter(id=request.user.id).only('residenza_id')
-            #     print(residenza.query)
-            #     print(residenza)
-            #     print(residenza[0])
-            #     sent = sentieri_della_mia_citta(residenza[0])
-            #     sentieri_voti_ids = []
-            #     for item in sent:
-            #         sentieri_voti_ids.append(str(item[0][1]))
-            #
-            #     sentieri= sentieri.filter(id__in=sentieri_voti_ids)
+            if miaCitta:
+                residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
+                sent = sentieri_della_mia_citta(residenza.id)
+                print(sent)
 
-            # if utentiMiaCitta:
-            #     print()
+                ids = [i[0] for i in sent]
+
+                sentieri = sentieri.filter(id__in=ids)
+
+            if utentiMiaCitta:
+                residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
+                sent = sentieri_percorsi_solo_da_utenti_della_mia_citta(residenza.id)
+                print(sent)
+
+                ids = [i[0] for i in sent]
+
+                sentieri = sentieri.filter(id__in=ids)
 
 
 

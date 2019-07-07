@@ -395,7 +395,6 @@ def info_complete_sentieri_id(idSentieri):
 def info_complete_sentieri():
 
     query = "select * from dati_sentiero"
-    print(query)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
