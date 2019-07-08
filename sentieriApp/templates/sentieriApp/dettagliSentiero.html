@@ -68,7 +68,7 @@
 
     <hr>
     <h3>Commenti</h3>
-    <h6 class="text-muted">{{ sentiero.18 }} commenti</h6>
+    <h6 class="text-muted">{{ commenti | length }} commenti</h6>
         {% for c in commenti %}
             <!--sentiero.id, sentiero.titolo, commento.id, commento.testo, utente.username, utente.id-->
             <div class="row mb-3">

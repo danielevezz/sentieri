@@ -297,7 +297,9 @@ def commenti_di_un_sentiero(idSentiero):
             join utente
             on utente.id = esperienza.user_id
 
-            where sentiero.id =""" + str(idSentiero)
+            where commento.testo <> ''
+            and sentiero.id = """ + str(idSentiero)
+
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
