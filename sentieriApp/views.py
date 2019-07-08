@@ -9,6 +9,7 @@ from django.http import HttpResponseNotFound, Http404
 from django.db import connection
 from .queries import *
 from . import views
+from django.db.models import Case, When
 
 # Una view in postgres
 # create view as ...
@@ -49,11 +50,12 @@ def elencoSentieri(request):
 
             print(difficolta)
 
-            # TODO costruire stringa mie Categorie
-
             if categorieR == "Tutte le categorie":
                 categorie = Categoria.objects.all()
                 categorie = [c.nome for c in categorie]
+            elif categorieR == "Categorie di mio interesse":
+                categorie = mie_categorie(request.user.id)
+                categorie = [c[0] for c in categorie]
             else:
                 categorie = [categorieR]
 
@@ -115,14 +117,21 @@ def elencoSentieri(request):
 
                 sentieri= sentieri.filter(id__in=sentieri_voti_ids)
 
-            if ordine=="Voto":
+
+
+            if ordine == "Voto":
+                print("Voto")
                 sentieri_ordinati = ordina_sentieri_per_voto()
                 sentieri_ids = []
                 for item in sentieri_ordinati:
                     id = item[0]
                     sentieri_ids.append(id)
-                sentieri = sentieri.filter(id__in=sentieri_ids)
-            elif ordine=="Partecipanti":
+                clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                ordering = 'CASE %s END' % clauses
+                sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                    select={'ordering': ordering}, order_by=('ordering',))
+            elif ordine == "Partecipanti":
+                print("Partecipanti")
                 sentieri_ordinati = ordina_sentieri_per_percorrenze()
                 sentieri_ids = []
                 for item in sentieri_ordinati:
@@ -130,7 +139,9 @@ def elencoSentieri(request):
                     sentieri_ids.append(id)
                 sentieri = sentieri.filter(id__in=sentieri_ids)
             else:
+                print("Titolo")
                 sentieri = sentieri.order_by('titolo')
+
 
             print(sentieri.query)
 

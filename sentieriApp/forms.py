@@ -56,6 +56,7 @@ class Filtro(Form):
     CATEG = Categoria.objects.all()
     CATEG = [c.nome for c in CATEG]
     CATEG += ["Tutte le categorie"]
+    CATEG += ["Categorie di mio interesse"]
 
     SCELTE_CATEGORIA = tuple(zip(CATEG, CATEG))
 
