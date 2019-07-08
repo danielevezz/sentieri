@@ -7,12 +7,14 @@
         <p>{{ utente.residenza }}</p>
         <h6 class="text-muted">{{ utente.sesso }}<br>{{ utente.eta }} anni</h6>
         <br>
+        {% if interessi %}
         <h6>Categorie d'interesse: <br></h6>
         <ul>
             {% for i in interessi %}
                 <li>{{ i.categoria }}</li>
             {% endfor %}
         </ul>
+        {% endif %}
         <hr>
             <h2>Esperienze personali</h2>
             <h5 class="text-muted">{{ esperienze | length }} esperienze</h5>

@@ -400,51 +400,52 @@ def info_complete_sentieri():
         table = cursor.fetchall()
     return table
 
-# def info_complete_sentieri():
-#     query = """
-#                 Select Distinct
-#                 sentiero.id,
-#                 sentiero.titolo,
-#                 sentiero.durata,
-#                 sentiero.descrizione,
-#                 sentiero.dislivello,
-#                 sentiero.salita,
-#                 sentiero.discesa,
-#                 sentiero."altitudineMax",
-#                 sentiero."altitudineMin",
-#                 sentiero.ciclico,
-#                 sentiero."linkMappa",
-#                 sentiero.difficolta_id,
-#                 sentiero."ptoGeograficoArrivo_id",
-#                 sentiero."ptoGeograficoPartenza_id",
-#                 categoria.nome as categoria,
-#                 partenza.nome as partenza,
-#                 arrivo.nome as arrivo,
-#                 count(esperienza.id) as partecipanti,
-#                 count(distinct commento.id) as numeroCommenti,
-#                 round(avg(esperienza.voto),2) as mediavoti,
-#                 ROUND( AVG(esperienza.difficolta),2 ) as difficoltamedia
-#
-#                 from sentiero
-#
-#                 left join punto_geografico as partenza
-#                 on partenza.id = sentiero."ptoGeograficoPartenza_id"
-#
-#                 left join punto_geografico as arrivo
-#                 on arrivo.id = sentiero."ptoGeograficoArrivo_id"
-#
-#                 left join categoria
-#                 on sentiero.categoria_id = categoria.nome
-#
-#                 left join esperienza
-#                 on sentiero.id = esperienza.sentiero_id
-#
-#                 left join commento
-#                 on commento.esperienza_id = esperienza.id
-#
-#                 group by (sentiero.id, categoria.nome, partenza.nome, arrivo.nome )"""
-#
-#     with connection.cursor() as cursor:
-#         cursor.execute(query)
-#         table = cursor.fetchall()
-#     return table
+def info_complete_sentieri():
+    query = """
+                Select Distinct
+                sentiero.id,
+                sentiero.titolo,
+                sentiero.durata,
+                sentiero.descrizione,
+                sentiero.dislivello,
+                sentiero.salita,
+                sentiero.discesa,
+                sentiero."altitudineMax",
+                sentiero."altitudineMin",
+                sentiero.ciclico,
+                sentiero."linkMappa",
+                sentiero.difficolta_id,
+                sentiero."ptoGeograficoArrivo_id",
+                sentiero."ptoGeograficoPartenza_id",
+                categoria.nome as categoria,
+                partenza.nome as partenza,
+                arrivo.nome as arrivo,
+                count(esperienza.id) as partecipanti,
+                count(distinct commento.id) as numeroCommenti,
+                round(avg(esperienza.voto),2) as mediavoti,
+                ROUND( AVG(esperienza.difficolta),2 ) as difficoltamedia,
+                sentiero.lunghezza
+
+                from sentiero
+
+                left join punto_geografico as partenza
+                on partenza.id = sentiero."ptoGeograficoPartenza_id"
+
+                left join punto_geografico as arrivo
+                on arrivo.id = sentiero."ptoGeograficoArrivo_id"
+
+                left join categoria
+                on sentiero.categoria_id = categoria.nome
+
+                left join esperienza
+                on sentiero.id = esperienza.sentiero_id
+
+                left join commento
+                on commento.esperienza_id = esperienza.id
+
+                group by (sentiero.id, categoria.nome, partenza.nome, arrivo.nome )"""
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table

@@ -72,7 +72,7 @@ def elencoSentieri(request):
 
             sentieri = sentieri.filter(difficolta__in=diff)
 
-            sentieri = sentieri.filter(titolo__contains=titolo)
+            sentieri = sentieri.filter(titolo__icontains=titolo)
 
             if preferiti:
                 sentieri = sentieri.filter(preferito__user_id=request.user.id)
