@@ -14,7 +14,8 @@ urlpatterns = [
     path("commentiDiUtente/<int:idUtente>/", views.commentiDiUtente, name="commentiDiUtente"),
     path("modificaAccount", views.modificaAccount, name="modificaAccount"),
     path("luogo/<int:idLuogo>/", views.dettagliLuogo, name="dettagliLuogo"),
-    path("elencoUtenti/", views.elencoUtenti, name="elencoUtenti")
+    path("elencoUtenti/", views.elencoUtenti, name="elencoUtenti"),
+    path("elencoSentieriDiUnLuogo/", views.elencoSentieriDiUnLuogo, name="elencoSentieriDiUnLuogo")
 
 ]
 

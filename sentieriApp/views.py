@@ -220,6 +220,9 @@ def elencoUtenti(request):
 def elencoSentieriDiUtente(request, idUtente):
     return render(request, 'sentieriApp/elencoSentieriDiUtente.html', {'sentieri' : sentieri_effettuati(idUtente)})
 
+def elencoSentieriDiUnLuogo(request, idLuogo):
+    return render(request, 'sentieriApp/elencoSentieriDiUnLuogo.html', {'sentieri' : sentieri_di_un_luogo(idLuogo)})
+
 def commentiDiUtente(request, idUtente):
     return render(request, 'sentieriApp/commentiDiUtente.html', {'commenti' : commenti_di_un_utente(idUtente)})
 
@@ -279,7 +282,7 @@ def dettagliUtente(request, idUtente):
 
 def dettagliLuogo(request, idLuogo):
     luogo = informazioni_luogo(idLuogo)
-    return render(request, 'sentieriApp/dettagliLuogo.html', {'luogo':luogo})
+    return render(request, 'sentieriApp/dettagliLuogo.html', {'luogo':luogo, 'sentieri':sentieri_di_un_luogo(idLuogo)})
 
 
 

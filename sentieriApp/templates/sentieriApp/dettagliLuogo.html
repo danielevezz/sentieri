@@ -13,5 +13,14 @@
 
     <p><a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=luogo.5 %}">Punto geografico </a></p>
 
+     {% if sentieri %}
+        <h4>Sentieri che passano da qui</h4>
+        <ul>
+        {% for s in sentieri %}
+            <li><a href="{% url "dettagliSentiero" idSentiero=s.0%}">{{ s.1 }}</a> </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+
 
 {% endblock %}

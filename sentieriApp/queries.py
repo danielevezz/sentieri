@@ -68,6 +68,17 @@ def luoghi_di_un_sentiero(idSentiero):
         table = cursor.fetchall()
     return table
 
+def sentieri_di_un_luogo(idLuogo):
+    query = """select sentiero.*
+                from sentiero
+                join tappa
+                on sentiero.id = tappa.sentiero_id
+                where tappa.luogo_id ="""+str(idLuogo)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
 
 def informazioni_luogo(idLuogo):
     query = """select luogo.nome as nome_luogo, luogo.descrizione as descrizione_luogo,
