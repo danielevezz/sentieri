@@ -32,6 +32,10 @@ class Sentiero(models.Model):
         verbose_name_plural = 'Sentieri'
         db_table = 'sentiero'
 
+    def media_voti(self):
+        media_voti = EsperienzaPersonale.objects.filter(user_id=self.id).get().voto.avg()
+        return media_voti
+
 
 
 

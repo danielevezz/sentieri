@@ -210,7 +210,7 @@ def ordina_sentieri_per_voto():
     return table
 
 def ordina_sentieri_per_percorrenze():
-    query = """  select *  from dati_sentiero order by partecipanti """
+    query = """  select *  from dati_sentiero order by partecipanti desc """
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()
@@ -383,9 +383,13 @@ def sentieri_di_categorie_preferite(idUser):
     return table
 
 
-def info_complete_sentieri_id(idSentieri):
+def info_complete_sentieri_id(idSentieri, ordersID):
 
-    query = "select * from dati_sentiero where id in (" + idSentieri + ")"
+    query = """select * from dati_sentiero join (
+                     select *
+                     from unnest(array["""+idSentieri+"""]) with ordinality
+                    ) as x (id, ordering) on dati_sentiero.id = x.id
+                order by x.ordering"""
     print(query)
     with connection.cursor() as cursor:
         cursor.execute(query)

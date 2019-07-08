@@ -130,6 +130,8 @@ def elencoSentieri(request):
                 ordering = 'CASE %s END' % clauses
                 sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
                     select={'ordering': ordering}, order_by=('ordering',))
+                print(sentieri)
+
             elif ordine == "Partecipanti":
                 print("Partecipanti")
                 sentieri_ordinati = ordina_sentieri_per_percorrenze()
@@ -137,21 +139,31 @@ def elencoSentieri(request):
                 for item in sentieri_ordinati:
                     id = item[0]
                     sentieri_ids.append(id)
-                sentieri = sentieri.filter(id__in=sentieri_ids)
+                clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                ordering = 'CASE %s END' % clauses
+                sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                    select={'ordering': ordering}, order_by=('ordering',))
+                print(sentieri)
             else:
                 print("Titolo")
-                sentieri = sentieri.order_by('titolo')
+                sentieri = Sentiero.objects.all().order_by('titolo')
+                print(sentieri)
 
 
             print(sentieri.query)
 
             ids = []
+            orderIds =""
+            i=0
             for s in sentieri:
                 ids.append(s.id)
+                i = i+1
+                orderIds += ", "+str(s.id)+","+str(i)
+
 
             if ids:
                 ids = ','.join(map(str, ids))
-                dati_sentieri = info_complete_sentieri_id(ids)
+                dati_sentieri = info_complete_sentieri_id(ids, orderIds)
             else:
                 dati_sentieri = []
 
