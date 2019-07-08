@@ -37,6 +37,7 @@ def elencoSentieri(request):
             categorieR = dati.get('categoria')
             durataMax = dati.get("durataMax")
             dislivelloMax = dati.get("dislivelloMax")
+            lunghezzaMax = dati.get("lunghezzaMax")
             ciclico = dati.get("ciclico")
             difficolta = dati.get("difficolta")
             media_alta = dati.get("media_alta")
@@ -64,8 +65,12 @@ def elencoSentieri(request):
 
             sentieri = Sentiero.objects.filter(categoria__in=categorie)
 
+            if durataMax == None:
+                durataMax = 50
             sentieri = sentieri.filter(durata__lte=durataMax)
 
+            if dislivelloMax == None:
+                dislivelloMax = 50000
             sentieri = sentieri.filter(dislivello__lte=dislivelloMax)
 
             sentieri = sentieri.filter(ciclico=ciclico)
@@ -73,6 +78,10 @@ def elencoSentieri(request):
             sentieri = sentieri.filter(difficolta__in=diff)
 
             sentieri = sentieri.filter(titolo__icontains=titolo)
+
+            if lunghezzaMax == None:
+                lunghezzaMax = 200
+            sentieri = sentieri.filter(lunghezza__lte=lunghezzaMax)
 
             if preferiti:
                 sentieri = sentieri.filter(preferito__user_id=request.user.id)

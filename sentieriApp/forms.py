@@ -60,14 +60,14 @@ class Filtro(Form):
     SCELTE_CATEGORIA = tuple(zip(CATEG, CATEG))
 
     categoria = forms.CharField(max_length=max([x.__len__() for x in CATEG]), widget=forms.Select(choices=SCELTE_CATEGORIA), required=False)
-    durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima", required=False) #Ore
-    dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo", required=False) #Metri
+    durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
+    dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
     ciclico = forms.BooleanField(required=False)
     media_alta = forms.CharField(required=False, label="Media voti più alta di")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
-    lunghezzaMax = forms.IntegerField(min_value=0, max_value=200, required=False, label="Lunghezza massima")
+    lunghezzaMax = forms.IntegerField(min_value=0, max_value=200, required=False, label="Lunghezza massima (Km)")
     preferiti = forms.BooleanField(required=False, label="Solo i miei percorsi preferiti")
     ordine = forms.CharField(required=False, label="Ordina per", widget=forms.Select(choices=[("Titolo","Titolo"), ("Voto", "Voto"), ("Partecipanti", "Partecipanti")]))
     miaCitta = forms.BooleanField(required=False, label="Solo percorsi della mia città")
