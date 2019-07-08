@@ -116,6 +116,7 @@ def elencoSentieri(request):
                     sentieri_voti_ids.append(id)
 
                 sentieri= sentieri.filter(id__in=sentieri_voti_ids)
+            print(sentieri)
 
 
 
@@ -146,7 +147,15 @@ def elencoSentieri(request):
                 print(sentieri)
             else:
                 print("Titolo")
-                sentieri = Sentiero.objects.all().order_by('titolo')
+                sentieri_ordinati = ordina_sentieri_per_titolo()
+                sentieri_ids = []
+                for item in sentieri_ordinati:
+                    id = item[0]
+                    sentieri_ids.append(id)
+                clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                ordering = 'CASE %s END' % clauses
+                sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                    select={'ordering': ordering}, order_by=('ordering',))
                 print(sentieri)
 
 

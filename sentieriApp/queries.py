@@ -227,6 +227,13 @@ def ordina_sentieri_per_percorrenze():
         table = cursor.fetchall()
     return table
 
+def ordina_sentieri_per_titolo():
+    query = """  select *  from dati_sentiero order by titolo """
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
 
 def sentieri_media_voti_piu_alta_di(media):
     media = str(media)
