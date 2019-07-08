@@ -3,7 +3,7 @@ from .models import Sentiero , PuntoGeografico, Commento, Categoria
 from .forms import CreazioneAccount, InserisciEsperienza, Filtro
 from .models import Sentiero, Utente, PuntoGeografico, EsperienzaPersonale, Commento, Categoria, Interessi, Preferito,\
     Difficolta, Citta
-from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito, ModificaAccount, FiltroUtenti
+from .forms import CreazioneAccount, InserisciEsperienza, SentieroPreferito, ModificaAccount, FiltroUtenti, FiltroNoLogin
 from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
 from django.db import connection
@@ -30,133 +30,133 @@ def index(request):
 # Ho usato il coso di django perchè non riuscivo con il raw per problemi di apici e stavo smattando
 def elencoSentieri(request):
 
-    filtro = Filtro(request.POST)
-    if request.method == 'POST':
-        if filtro.is_valid():
+    if request.user.is_authenticated:
+        filtro = Filtro(request.POST)
+        if request.method == 'POST':
+            if filtro.is_valid():
 
-            dati = filtro.cleaned_data
-            categorieR = dati.get('categoria')
-            durataMax = dati.get("durataMax")
-            dislivelloMax = dati.get("dislivelloMax")
-            lunghezzaMax = dati.get("lunghezzaMax")
-            ciclico = dati.get("ciclico")
-            difficolta = dati.get("difficolta")
-            media_alta = dati.get("media_alta")
-            titolo = dati.get("titolo")
-            preferiti = dati.get("preferiti")
-            ordine = dati.get("ordine")
-            miaCitta = dati.get("miaCitta")
-            utentiMiaCitta = dati.get("utentiMiaCitta")
+                dati = filtro.cleaned_data
+                categorieR = dati.get('categoria')
+                durataMax = dati.get("durataMax")
+                dislivelloMax = dati.get("dislivelloMax")
+                lunghezzaMax = dati.get("lunghezzaMax")
+                ciclico = dati.get("ciclico")
+                difficolta = dati.get("difficolta")
+                media_alta = dati.get("media_alta")
+                titolo = dati.get("titolo")
+                preferiti = dati.get("preferiti")
+                ordine = dati.get("ordine")
+                miaCitta = dati.get("miaCitta")
+                utentiMiaCitta = dati.get("utentiMiaCitta")
 
-            print(difficolta)
+                print(difficolta)
 
-            if categorieR == "Tutte le categorie":
-                categorie = Categoria.objects.all()
-                categorie = [c.nome for c in categorie]
-            elif categorieR == "Categorie di mio interesse":
-                categorie = mie_categorie(request.user.id)
-                categorie = [c[0] for c in categorie]
-            else:
-                categorie = [categorieR]
+                if categorieR == "Tutte le categorie":
+                    categorie = Categoria.objects.all()
+                    categorie = [c.nome for c in categorie]
+                elif categorieR == "Categorie di mio interesse":
+                    categorie = mie_categorie(request.user.id)
+                    categorie = [c[0] for c in categorie]
+                else:
+                    categorie = [categorieR]
 
-            if difficolta == "ALL":
-                diff = Difficolta.objects.all()
-                diff = [c.nome for c in diff]
-            else:
-                diff = [difficolta]
+                if difficolta == "ALL":
+                    diff = Difficolta.objects.all()
+                    diff = [c.nome for c in diff]
+                else:
+                    diff = [difficolta]
 
-            sentieri = Sentiero.objects.filter(categoria__in=categorie)
+                sentieri = Sentiero.objects.filter(categoria__in=categorie)
 
-            if durataMax == None:
-                durataMax = 50
-            sentieri = sentieri.filter(durata__lte=durataMax)
+                if durataMax == None:
+                    durataMax = 50
+                sentieri = sentieri.filter(durata__lte=durataMax)
 
-            if dislivelloMax == None:
-                dislivelloMax = 50000
-            sentieri = sentieri.filter(dislivello__lte=dislivelloMax)
+                if dislivelloMax == None:
+                    dislivelloMax = 50000
+                sentieri = sentieri.filter(dislivello__lte=dislivelloMax)
 
-            sentieri = sentieri.filter(ciclico=ciclico)
+                sentieri = sentieri.filter(ciclico=ciclico)
 
-            sentieri = sentieri.filter(difficolta__in=diff)
+                sentieri = sentieri.filter(difficolta__in=diff)
 
-            sentieri = sentieri.filter(titolo__icontains=titolo)
+                sentieri = sentieri.filter(titolo__icontains=titolo)
 
-            if lunghezzaMax == None:
-                lunghezzaMax = 200
-            sentieri = sentieri.filter(lunghezza__lte=lunghezzaMax)
+                if lunghezzaMax == None:
+                    lunghezzaMax = 200
+                sentieri = sentieri.filter(lunghezza__lte=lunghezzaMax)
 
-            if preferiti:
-                sentieri = sentieri.filter(preferito__user_id=request.user.id)
+                if preferiti:
+                    sentieri = sentieri.filter(preferito__user_id=request.user.id)
 
-            if miaCitta:
-                residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
-                sent = sentieri_della_mia_citta(residenza.id)
-                print(sent)
+                if miaCitta:
+                    residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
+                    sent = sentieri_della_mia_citta(residenza.id)
+                    print(sent)
 
-                ids = [i[0] for i in sent]
+                    ids = [i[0] for i in sent]
 
-                sentieri = sentieri.filter(id__in=ids)
+                    sentieri = sentieri.filter(id__in=ids)
 
-            if utentiMiaCitta:
-                residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
-                sent = sentieri_percorsi_solo_da_utenti_della_mia_citta(residenza.id)
-                print(sent)
+                if utentiMiaCitta:
+                    residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
+                    sent = sentieri_percorsi_solo_da_utenti_della_mia_citta(residenza.id)
+                    print(sent)
 
-                ids = [i[0] for i in sent]
+                    ids = [i[0] for i in sent]
 
-                sentieri = sentieri.filter(id__in=ids)
-
-
-
-            if media_alta:
-                sentieri_voti= sentieri_media_voti_piu_alta_di(str(media_alta))
-                sentieri_voti_ids=[]
-                for item in sentieri_voti:
-                    id = item[0]
-                    sentieri_voti_ids.append(id)
-
-                sentieri= sentieri.filter(id__in=sentieri_voti_ids)
-            print(sentieri)
+                    sentieri = sentieri.filter(id__in=ids)
 
 
 
-            if ordine == "Voto":
-                print("Voto")
-                sentieri_ordinati = ordina_sentieri_per_voto()
-                sentieri_ids = []
-                for item in sentieri_ordinati:
-                    id = item[0]
-                    sentieri_ids.append(id)
-                clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                ordering = 'CASE %s END' % clauses
-                sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                    select={'ordering': ordering}, order_by=('ordering',))
-                print(sentieri)
+                if media_alta:
+                    sentieri_voti= sentieri_media_voti_piu_alta_di(str(media_alta))
+                    sentieri_voti_ids=[]
+                    for item in sentieri_voti:
+                        id = item[0]
+                        sentieri_voti_ids.append(id)
 
-            elif ordine == "Partecipanti":
-                print("Partecipanti")
-                sentieri_ordinati = ordina_sentieri_per_percorrenze()
-                sentieri_ids = []
-                for item in sentieri_ordinati:
-                    id = item[0]
-                    sentieri_ids.append(id)
-                clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                ordering = 'CASE %s END' % clauses
-                sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                    select={'ordering': ordering}, order_by=('ordering',))
-                print(sentieri)
-            else:
-                print("Titolo")
-                sentieri_ordinati = ordina_sentieri_per_titolo()
-                sentieri_ids = []
-                for item in sentieri_ordinati:
-                    id = item[0]
-                    sentieri_ids.append(id)
-                clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                ordering = 'CASE %s END' % clauses
-                sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                    select={'ordering': ordering}, order_by=('ordering',))
-                print(sentieri)
+                    sentieri= sentieri.filter(id__in=sentieri_voti_ids)
+
+
+
+                if ordine == "Voto":
+                    print("Voto")
+                    sentieri_ordinati = ordina_sentieri_per_voto()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+                    print(sentieri)
+
+                elif ordine == "Partecipanti":
+                    print("Partecipanti")
+                    sentieri_ordinati = ordina_sentieri_per_percorrenze()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+                    print(sentieri)
+                else:
+                    print("Titolo")
+                    sentieri_ordinati = ordina_sentieri_per_titolo()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+                    print(sentieri)
 
 
             print(sentieri.query)
@@ -179,15 +179,130 @@ def elencoSentieri(request):
             return render(request, 'sentieriApp/elencoSentieri.html',
                       {'sentieri': dati_sentieri, 'form': filtro})
 
+        else:
+            filtro = Filtro(initial={'difficolta': "ALL",
+                                     'categoria': "Tutte le categorie",
+                                     'durataMax': 50,
+                                     'dislivelloMax': 50000,
+                                     'ciclico': False})
+
     else:
-        filtro = Filtro(initial={'difficolta': "ALL",
-                                 'categoria': "Tutte le categorie",
-                                 'durataMax': 50,
-                                 'dislivelloMax': 50000,
-                                 'ciclico': False})
+        print("no autenticato")
+        filtroNoLogin = FiltroNoLogin(request.POST)
+        if request.method == 'POST':
+            if filtroNoLogin.is_valid():
+
+                dati = filtroNoLogin.cleaned_data
+                categorieR = dati.get('categoria')
+                durataMax = dati.get("durataMax")
+                dislivelloMax = dati.get("dislivelloMax")
+                lunghezzaMax = dati.get("lunghezzaMax")
+                ciclico = dati.get("ciclico")
+                difficolta = dati.get("difficolta")
+                media_alta = dati.get("media_alta")
+                titolo = dati.get("titolo")
+                ordine = dati.get("ordine")
+
+                print(difficolta)
+
+                if categorieR == "Tutte le categorie":
+                    categorie = Categoria.objects.all()
+                    categorie = [c.nome for c in categorie]
+                else:
+                    categorie = [categorieR]
+
+                if difficolta == "ALL":
+                    diff = Difficolta.objects.all()
+                    diff = [c.nome for c in diff]
+                else:
+                    diff = [difficolta]
+
+                sentieri = Sentiero.objects.filter(categoria__in=categorie)
+
+                if durataMax == None:
+                    durataMax = 50
+                sentieri = sentieri.filter(durata__lte=durataMax)
+
+                if dislivelloMax == None:
+                    dislivelloMax = 50000
+                sentieri = sentieri.filter(dislivello__lte=dislivelloMax)
+
+                sentieri = sentieri.filter(ciclico=ciclico)
+
+                sentieri = sentieri.filter(difficolta__in=diff)
+
+                sentieri = sentieri.filter(titolo__icontains=titolo)
+
+                if lunghezzaMax == None:
+                    lunghezzaMax = 200
+                sentieri = sentieri.filter(lunghezza__lte=lunghezzaMax)
+
+                if media_alta:
+                    sentieri_voti = sentieri_media_voti_piu_alta_di(str(media_alta))
+                    sentieri_voti_ids = []
+                    for item in sentieri_voti:
+                        id = item[0]
+                        sentieri_voti_ids.append(id)
+
+                    sentieri = sentieri.filter(id__in=sentieri_voti_ids)
+
+                if ordine == "Voto":
+                    print("Voto")
+                    sentieri_ordinati = ordina_sentieri_per_voto()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+                    print(sentieri)
+
+                elif ordine == "Partecipanti":
+                    print("Partecipanti")
+                    sentieri_ordinati = ordina_sentieri_per_percorrenze()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+                    print(sentieri)
+                else:
+                    print("Titolo")
+                    sentieri = Sentiero.objects.all().order_by('titolo')
+                    print(sentieri)
+
+            print(sentieri.query)
+
+            ids = []
+            orderIds = ""
+            i = 0
+            for s in sentieri:
+                ids.append(s.id)
+                i = i + 1
+                orderIds += ", " + str(s.id) + "," + str(i)
+
+            if ids:
+                ids = ','.join(map(str, ids))
+                dati_sentieri = info_complete_sentieri_id(ids, orderIds)
+            else:
+                dati_sentieri = []
+
+            return render(request, 'sentieriApp/elencoSentieri.html',
+                          {'sentieri': dati_sentieri, 'form': filtroNoLogin})
+
+        else:
+            filtro = FiltroNoLogin(initial={'difficolta': "ALL",
+                                     'categoria': "Tutte le categorie",
+                                     'durataMax': 50,
+                                     'dislivelloMax': 50000,
+                                     'ciclico': False})
 
     dati_sentieri = info_complete_sentieri()
-    print("mlem")
     return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri': dati_sentieri, 'form': filtro,
                                                                'errors': filtro.errors})
 
