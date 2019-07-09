@@ -32,6 +32,7 @@
         <h1 class="mb-3">{{ utente.1 }}</h1>
         <h6 class="text-muted">{{ utente.2 }}<br>{{ utente.3 }} anni</h6>
         <h4 class="mt-4">Informazioni</h4>
+        <hr>
         <p>Percorsi effettuati: <a href="{% url "elencoSentieriDiUtente" idUtente=utente.0%}">{{ utente.4 }}</a><br>
         Commenti: <a href="{% url "commentiDiUtente" idUtente=utente.0%}">{{ utente.5 }}</a></p>
     {% endif %}

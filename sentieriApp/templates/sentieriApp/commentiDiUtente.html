@@ -8,17 +8,13 @@
     <h6 class="text-muted"></h6>
         {% for c in commenti %}
             <!--sentiero.id, sentiero.titolo, commento.id, commento.testo, esperienza.voto-->
-            <div class="row mb-3">
-                <div class="col-sm-4">
-                    <a href="{% url "dettagliSentiero" idSentiero=c.0 %}">{{ c.1 }}</a>
+            <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ c.1 | title }} <span class="badge badge-secondary ml-1">{{ c.4}}</span> </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Testo: {{ c.3 }}</h6>
+                        <a href="{% url "dettagliSentiero" idSentiero=c.0%}">Dettagli sentiero</a>
+                    </div>
                 </div>
-                <div class="col-sm-8">
-                    {{ c.3 |capfirst }}
-                </div>
-                <div class="col-sm-12">
-                    {{ c.4 |capfirst }}
-                </div>
-            </div>
         {% endfor %}
 
 

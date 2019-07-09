@@ -4,9 +4,13 @@
 <body>
 
 <div class="row">
+
     <div class="col-md-4">
         <form action="{% url "elencoUtenti" %}" method="post">
             {% csrf_token %}
+            <br>
+            <br>
+            <br>
             {% for field in form %}
                 <div class="form-group">
                     {{ field.label_tag }} {{ field }}
