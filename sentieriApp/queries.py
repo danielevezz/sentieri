@@ -38,7 +38,7 @@ def mie_categorie(idUser):
 
 def utentePubblico(idUtente):
     query = """
-                select distinct utente.id, username, sesso, eta, count(distinct esperienza.id) as percorsieffettuati, count (distinct commento.id) as commentifatti
+                select distinct utente.id, username, sesso, eta, count(distinct esperienza.sentiero_id) as percorsieffettuati, count((NULLIF(commento.testo,''))) as commenti
                 from utente
 
                 left join esperienza
@@ -105,7 +105,7 @@ def utenti_popolari():
     						group by utente.id) as foo"""
 
     query = """
-                select utente.id, utente.username, count(esperienza.id) as esperienze, count(distinct commento.id) as commenti
+                select utente.id, utente.username, count(distinct esperienza.sentiero_id) as esperienze, count((NULLIF(commento.testo,''))) as commenti
                 from utente
 
                 join esperienza
@@ -124,7 +124,7 @@ def utenti_popolari():
 
 def ordina_utenti_popolari():
     query = """
-                 select utente.id, utente.username, count(esperienza.id) as esperienze, count(distinct commento.id) as commenti
+                 select utente.id, utente.username, count(distinct esperienza.sentiero_id) as esperienze, count((NULLIF(commento.testo,''))) as commenti
                 from utente
 
                 join esperienza
@@ -144,7 +144,7 @@ def ordina_utenti_popolari():
 
 def ordina_utenti_username():
     query = """
-                 select utente.id, utente.username, count(esperienza.id) as esperienze, count(distinct commento.id) as commenti
+                 select utente.id, utente.username, count(distinct esperienza.sentiero_id) as esperienze, count((NULLIF(commento.testo,''))) as commenti
                 from utente
 
                 join esperienza
@@ -163,26 +163,19 @@ def ordina_utenti_username():
     return table
 
 def ordina_utenti_commenti():
-    commenti ="""select utente.id as identificatore, count(commento.id) as commenti
-							from utente
-							 join esperienza
-							on esperienza.user_id = utente.id
-							join commento
-							on commento.esperienza_id = esperienza.id
-							group by utente.id
-							order by commenti"""
-    query = """
-                select utente.id, utente.username, count(esperienza.id) as esperienze, foo.commenti as commenti
-							from ("""+str(commenti)+""")as foo
 
-                join utente
-				on foo.identificatore = utente.id
+    query = """
+                select utente.id, utente.username, count(distinct esperienza.sentiero_id) as esperienze, count((NULLIF(commento.testo,''))) as commenti
+                from utente
 
                 join esperienza
-                on esperienza.user_id = foo.identificatore
+                on esperienza.user_id = utente.id
                
-				group by foo.commenti, utente.id
-				order by foo.commenti desc
+				 left join commento
+                on commento.esperienza_id = esperienza.id
+            
+				group by utente.id
+                order by commenti desc
                """
 
     with connection.cursor() as cursor:
@@ -277,15 +270,18 @@ def sentieri_effettuati(idUser):
 def commenti_di_un_utente(idUser):
     query = """
             select distinct sentiero.id, sentiero.titolo, commento.id, commento.testo, esperienza.voto
-            from esperienza
+            from utente
 
-            join commento
-            on commento.esperienza_id = commento.id
-
-            join sentiero
-            on sentiero.id = esperienza.sentiero_id
-
-            where esperienza.user_id = """ + str(idUser)
+            join esperienza
+            on esperienza.user_id = utente.id
+               
+			left join commento
+            on commento.esperienza_id = esperienza.id
+				
+			left join sentiero
+			on sentiero.id = esperienza.sentiero_id
+				
+			where commento.testo <> '' and utente.id = """ + str(idUser)
     with connection.cursor() as cursor:
         cursor.execute(query)
         table = cursor.fetchall()

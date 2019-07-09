@@ -323,6 +323,7 @@ def elencoUtenti(request):
             dati = filtro.cleaned_data
             popolari = dati.get('utentiPopolari')
             ordina = dati.get("ordina")
+            commenti = Commento.objects.filter(esperienza__user_id=1).exclude(testo="").count()
 
             if ordina=="Nome":
                 utenti = ordina_utenti_username()
@@ -342,7 +343,6 @@ def elencoUtenti(request):
 
     else:
         filtro = FiltroUtenti()
-
 
     utenti = ordina_utenti_username()
     return render(request, 'sentieriApp/elencoUtenti.html', {'utenti': utenti, 'form': filtro})
