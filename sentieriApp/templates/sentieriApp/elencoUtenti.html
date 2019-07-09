@@ -2,33 +2,41 @@
 
 {% block body %}
 <body>
-<h3>Sentieri</h3>
-<ul>
-<!-- utente.id, utente.username, esperienze, commenti -->
-    {% if utenti %}
-        {% for u in utenti %}
-            <li><a href="{% url "areaPersonale" idUtente=u.0%}">{{ u.1 }}</a> Esperienze: {{ u.2 }} </li>
-        {% endfor %}
-    {% else %}
-        <li>Non ci sono utenti con questi filtri</li>
-    {% endif %}
-</ul>
 
-<hr>
-<h4 class="text-muted">Filtri</h4>
-<form action="{% url "elencoUtenti" %}" method="post">
-    {% csrf_token %}
-    {% for field in form %}
-        <div class="form-group">
-            <div class="row">
-                <div class="col-md-8">
+<div class="row">
+    <div class="col-md-4">
+        <form action="{% url "elencoUtenti" %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
                     {{ field.label_tag }} {{ field }}
                 </div>
-            </div>
-        </div>
-    {% endfor %}
-    <input type="submit" class="btn btn-primary col-md-8" value="Filtra"/>
-</form>
+            {% endfor %}
+            <input type="submit" class="btn btn-primary col-md-8" value="Filtra"/>
+        </form>
+    </div>
+
+ <div class="col-md-8 ">
+ <!-- utente.id, utente.username, esperienze, commenti -->
+    <h3>Utenti</h3>
+        {% if utenti %}
+            {% for u in utenti %}
+
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ u.1 }}  </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Percorsi effettuati: {{ u.2 }}</h6>
+                        <a href="{% url "areaPersonale" idUtente=u.0%}">Visita pagina</a>
+                    </div>
+                </div>
+
+            {% endfor %}
+        {% else %}
+            Non ci sono utenti con questi filtri!
+        {% endif %}
+    </div>
+
+</div>
 
     <div class="alert-warning">
         {{ errors }}
