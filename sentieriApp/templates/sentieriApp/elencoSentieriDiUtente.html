@@ -6,7 +6,12 @@
 <ul>
     {% if sentieri %}
         {% for s in sentieri %}
-            <li><a href="{% url "dettagliSentiero" idSentiero=s.0%}">{{ s.1 }}</a> </li>
+            <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ s.1 | title }} <span class="badge badge-secondary ml-1">{{ s.2}}</span> </h5>
+                        <a href="{% url "dettagliSentiero" idSentiero=s.0%}">Dettagli sentiero</a>
+                    </div>
+                </div>
         {% endfor %}
     {% else %}
         <li>Non ci sono sentieri</li>

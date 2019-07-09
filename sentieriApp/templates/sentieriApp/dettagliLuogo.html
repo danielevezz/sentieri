@@ -1,23 +1,29 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
 {% block body %}
-    <!--nome_luogo   descrizione_luogo    sito    nome_tipo   descrizione_tipo   ptoGeografico_id  -->
+    <!--nome_luogo   descrizione_luogo    sito    nome_tipo   descrizione_tipo   ptoGeografico_id  id_pto  latitudine   longitudine  -->
     <h1 class="mt-3">{{ luogo.0 }}</h1>
     <p>{{ luogo.1 }}</p>
+    <p>{{ luogo.6 }}  {{ luogo.7 }}</p>
     {% if luogo.2 %}
+     <br>
      <p><a href={{ luogo.2 }}>Sito internet</a></p>
     {% endif %}
     <br>
     <h5 class="text-muted mt-1">{{ luogo.3 }}</h5>
     <p>{{ luogo.4 }}</p>
 
-    <p><a href="{% url 'dettagliPuntoGeografico' idPtoGeografico=luogo.5 %}">Punto geografico </a></p>
-
+    <hr>
      {% if sentieri %}
-        <h4>Sentieri che passano da qui</h4>
+        <h4>Sentieri che passano da qui:</h4>
         <ul>
         {% for s in sentieri %}
-            <li><a href="{% url "dettagliSentiero" idSentiero=s.0%}">{{ s.1 }}</a> </li>
+            <div class="card mb-1">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ s.1 | title }} </h5>
+                        <a href="{% url "dettagliSentiero" idSentiero=s.0%}">Dettagli sentiero</a>
+                    </div>
+                </div>
         {% endfor %}
         </ul>
     {% endif %}

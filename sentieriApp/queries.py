@@ -83,7 +83,7 @@ def sentieri_di_un_luogo(idLuogo):
 def informazioni_luogo(idLuogo):
     query = """select luogo.nome as nome_luogo, luogo.descrizione as descrizione_luogo,
                 luogo.sito, tipologia_luogo.nome as nome_tipo, tipologia_luogo.descrizione as descrizione_tipo, 
-                punto_geografico.id as ptoGeografico_id
+                punto_geografico.*
                 from luogo
                 join tipologia_luogo
                 on luogo."tipoLuogo_id"= tipologia_luogo.id
@@ -251,7 +251,7 @@ def sentieri_media_voti_piu_alta_di(media):
 
 def sentieri_effettuati(idUser):
     query = """
-                select distinct sentiero.id, sentiero.titolo
+                select distinct sentiero.id, sentiero.titolo, esperienza.voto
                 from sentiero
 
                 join esperienza 

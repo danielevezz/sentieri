@@ -1,31 +1,42 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
 {% block body %}
-        {% if form.errors %}
+       <body>
+<div class="row">
+    <div class="col-md-4">
+        <form action="{% url "modificaAccount" %}" method="post">
+            {% csrf_token %}
             {% for field in form %}
-                {% for error in field.errors %}
-                    <div class="alert alert-danger">
-                        <strong>{{ error|escape }}</strong>
-                    </div>
-                {% endfor %}
-            {% endfor %}
-            {% for error in form.non_field_errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
+                <div class="form-group">
+                    {{ field.label_tag }} {{ field }}
                 </div>
             {% endfor %}
-        {% endif %}
-        <form action="{% url "modificaAccount" %}" method="post">
-
-            {% csrf_token %}
-            <div class="form-group">
-                {{ form.as_p }}
-            </div>
-                <input type="submit" class="btn btn-primary" value="Salva"/>
+            <input type="submit" class="btn btn-primary col-md-8" value="Salva"/>
+            <p><a href="{% url 'areaPersonale' idUtente=request.user.id %}">Annulla </a></p>
         </form>
+    </div>
 
-    <br>
-    <p><a href="{% url 'areaPersonale' idUtente=request.user.id %}">Annulla </a></p>
+</div>
+
+<div class="mb-4"></div>
+
+    <!--div class="alert-warning">
+        {{ errors }}
+    </div>
+    <div class="mb-4"></div-->
+
+    <script>
+        tags = document.getElementsByTagName("input")
+        for (i = 0; i< tags.length; i++) {
+            if (tags[i].type != "checkbox")
+                tags[i].classList.add("form-control")
+        }
+
+        tags = document.getElementsByTagName("select")
+        for (i = 0; i< tags.length; i++) {
+                tags[i].classList.add("form-control")
+        }
+    </script>
 
        <script>
         tags = document.getElementsByTagName("input")
