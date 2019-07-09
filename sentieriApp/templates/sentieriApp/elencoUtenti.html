@@ -1,25 +1,11 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
 {% block body %}
-<body>
-<style>
-    @media (min-width: 768px) {
-  .collapse.dont-collapse-sm {
-    display: block;
-    height: auto !important;
-    visibility: visible;
-  }
-}
-</style>
-
-<div class="row">
-
+<div class="row mt-4">
     <div class="col-md-4">
         <form action="{% url "elencoUtenti" %}" method="post">
             {% csrf_token %}
-            <br>
-            <br>
-            <br>
+
             {% for field in form %}
                 <div class="form-group">
                     {{ field.label_tag }} {{ field }}
@@ -31,11 +17,10 @@
 
  <div class="col-md-8 ">
  <!-- utente.id, utente.username, esperienze, commenti -->
-    <h3>Utenti</h3>
         {% if utenti %}
             {% for u in utenti %}
 
-                <div class="card mb-1">
+                <div class="card mb-1 carta">
                     <div class="card-body">
                         <h5 class="card-title">{{ u.1 }}  </h5>
                         <h6 class="card-subtitle mb-2 text-muted">Percorsi effettuati: {{ u.2 }}</h6>
