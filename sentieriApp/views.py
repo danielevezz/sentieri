@@ -410,7 +410,9 @@ def dettagliUtente(request, idUtente):
             return render(request, 'sentieriApp/dettagliUtente.html', {'utente': utente, 'esperienze': esperienze,
                                                                        'personale': True, 'interessi': interessi})
 
-    return render(request, 'sentieriApp/dettagliUtente.html', {"utente": utentePubblico(idUtente)})
+    return render(request, 'sentieriApp/dettagliUtente.html', {"utente": utentePubblico(idUtente),
+                                                               "sentieri_effettuati": sentieri_effettuati(idUtente),
+                                                               "commenti": commenti_di_un_utente(idUtente)})
 
 def dettagliLuogo(request, idLuogo):
     luogo = informazioni_luogo(idLuogo)

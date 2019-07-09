@@ -27,4 +27,17 @@
     <br>
     <p><a href="{% url 'areaPersonale' idUtente=request.user.id %}">Annulla </a></p>
 
+       <script>
+        tags = document.getElementsByTagName("input")
+        for (i = 0; i< tags.length; i++) {
+            if (tags[i].type != "checkbox")
+                tags[i].classList.add("form-control")
+        }
+
+        tags = document.getElementsByTagName("select")
+        for (i = 0; i< tags.length; i++) {
+                tags[i].classList.add("form-control")
+        }
+    </script>
+
 {% endblock %}

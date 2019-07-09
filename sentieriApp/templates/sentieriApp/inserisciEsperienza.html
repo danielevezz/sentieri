@@ -24,4 +24,22 @@
         </div>
             <input type="submit" class="btn btn-primary" value="Crea"/>
     </form>
+
+    <script>
+        tags = document.getElementsByTagName("input")
+        for (i = 0; i< tags.length; i++) {
+            if (tags[i].type != "checkbox")
+                tags[i].classList.add("form-control")
+        }
+
+        tags = document.getElementsByTagName("select")
+
+                tags[0].classList.add("form-control")
+
+
+        tags = document.getElementsByTagName("textarea")
+        for (i = 0; i< tags.length; i++) {
+                tags[i].classList.add("form-control")
+        }
+    </script>
 {% endblock %}
