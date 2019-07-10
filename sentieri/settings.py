@@ -27,7 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-EASY_MAPS_GOOGLE_KEY = 'AIzaSyAVgGs3qCV0tF2-6eOgGKOE0rk72_XckiQ'
+#EASY_MAPS_GOOGLE_KEY = 'AIzaSyAVgGs3qCV0tF2-6eOgGKOE0rk72_XckiQ' #padre
+EASY_MAPS_GOOGLE_KEY = 'AIzaSyB1gP8tKPgDPWcew7_nqTt_caqfZ4BiH80' #vezz
+
+EASY_MAPS_ZOOM = 16
+EASY_MAPS_LANGUAGE = 'it'
 
 # Application definition
 
