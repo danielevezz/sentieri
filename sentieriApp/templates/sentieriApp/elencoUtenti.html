@@ -1,37 +1,31 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
 {% block body %}
-<body>
-
-<div class="row">
-
+<div class="row mt-4">
     <div class="col-md-4">
         <form action="{% url "elencoUtenti" %}" method="post">
             {% csrf_token %}
-            <br>
-            <br>
-            <br>
+
             {% for field in form %}
                 <div class="form-group">
                     {{ field.label_tag }} {{ field }}
                 </div>
             {% endfor %}
-            <input type="submit" class="btn btn-primary col-md-8" value="Filtra"/>
+            <input type="submit" class="btn btn-primary col-md-8 mb-3" value="Filtra"/>
         </form>
     </div>
 
  <div class="col-md-8 ">
  <!-- utente.id, utente.username, esperienze, commenti -->
-    <h3>Utenti</h3>
         {% if utenti %}
             {% for u in utenti %}
 
-                <div class="card mb-1">
+                <div class="card mb-1 carta">
                     <div class="card-body">
                         <h5 class="card-title">{{ u.1 }}  </h5>
                         <h6 class="card-subtitle mb-2 text-muted">Percorsi effettuati: {{ u.2 }}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">Commenti: {{ u.3 }}</h6>
-                        <a href="{% url "areaPersonale" idUtente=u.0%}">Visita pagina</a>
+                        <a href="{% url "areaPersonale" idUtente=u.0%}">Profilo</a>
                     </div>
                 </div>
 
@@ -47,10 +41,15 @@
         {{ errors }}
     </div>
 
-    <script>
+   <script>
         tags = document.getElementsByTagName("input")
         for (i = 0; i< tags.length; i++) {
             if (tags[i].type != "checkbox")
+                tags[i].classList.add("form-control")
+        }
+
+        tags = document.getElementsByTagName("select")
+        for (i = 0; i< tags.length; i++) {
                 tags[i].classList.add("form-control")
         }
     </script>

@@ -2,7 +2,7 @@
 
 {% block body %}
 <body>
-<div class="row">
+<div class="row mt-4">
     <div class="col-md-4">
         <form action="{% url "elencoSentieri" %}" method="post">
             {% csrf_token %}
@@ -11,13 +11,12 @@
                     {{ field.label_tag }} {{ field }}
                 </div>
             {% endfor %}
-            <input type="submit" class="btn btn-primary col-md-8" value="Filtra"/>
+            <input type="submit" class="btn btn-primary col-md-8 mb-3" value="Filtra"/>
         </form>
     </div>
 
 
     <div class="col-md-8 ">
-    <h3>Sentieri</h3>
         {% if sentieri %}
             {% for s in sentieri %}
 

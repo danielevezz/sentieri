@@ -16,24 +16,60 @@
         </ul>
         {% endif %}
         <hr>
-            <h2>Esperienze personali</h2>
-            <h5 class="text-muted">{{ esperienze | length }} esperienze</h5>
-            <h6 class="mb-4"><a href="{% url "inserisciEsperienza" %}">Aggiungi nuova esperienza</a></h6>
-            {% for e in esperienze %}
-                <h4> <a href="{% url "dettagliSentiero" idSentiero=e.sentiero_id%}">{{ e.sentiero }}</a></h4>
-                <p class="text-muted">{{ e.data_esperienza }}</p>
-                <p>Voto: {{ e.voto }}</p>
-                <p>Difficolta: {{ e.difficolta }}</p>
-                <div class="alert-light">Commento: {{ e.commento_set.get | capfirst }}</div>
-                <hr>
-            {% endfor %}
+        <h2>Esperienze personali</h2>
+        <h5 class="text-muted">{{ esperienze | length }} esperienze</h5>
+        <h6 class="mb-4"><a href="{% url "inserisciEsperienza" %}">Aggiungi nuova esperienza</a></h6>
+        {% for e in esperienze %}
+            <h4> <a href="{% url "dettagliSentiero" idSentiero=e.sentiero_id%}">{{ e.sentiero }}</a></h4>
+            <p class="text-muted">{{ e.data_esperienza }}</p>
+            <p>Voto: {{ e.voto }}</p>
+            <p>Difficolta: {{ e.difficolta }}</p>
+            <div class="alert-light">Commento: {{ e.commento_set.get | capfirst }}</div>
+            <hr>
+        {% endfor %}
 
     {% else %}
         <h1 class="mb-3">{{ utente.1 }}</h1>
         <h6 class="text-muted">{{ utente.2 }}<br>{{ utente.3 }} anni</h6>
-        <h4 class="mt-4">Informazioni</h4>
-        <hr>
-        <p>Percorsi effettuati: <a href="{% url "elencoSentieriDiUtente" idUtente=utente.0%}">{{ utente.4 }}</a><br>
-        Commenti: <a href="{% url "commentiDiUtente" idUtente=utente.0%}">{{ utente.5 }}</a></p>
+
+            {% if sentieri_effettuati %}
+                <button class="btn btn-primary mb-3 mr-1" type="button" data-toggle="collapse" data-target="#collapseSentieri"
+                        aria-expanded="false" aria-controls="collapseExample">
+                    Percorsi effettuati: {{ sentieri_effettuati | length }}
+                </button>
+            {% endif %}
+
+            {% if commenti %}
+                <button class="btn btn-primary mb-3 ml-1" type="button" data-toggle="collapse" data-target="#collapseCommenti"
+                        aria-expanded="false" aria-controls="collapseExample">
+                    Commenti: {{ commenti | length }}
+                </button>
+            {% endif %}
+            <div class="row">
+                <div class="collapse col-md-6" id="collapseSentieri">
+                  <div class="card card-body mb-3">
+                    {% for s in sentieri_effettuati %}
+                        <a href="{% url "dettagliSentiero" idSentiero=s.0%}">{{ s.1 }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+
+
+                <div class="collapse col-md-6" id="collapseCommenti">
+                  <div class="card card-body">
+                    {% for c in commenti %}
+                        <div class="row mb-3">
+                            <div class="col-sm-5">
+                                <a href="{% url "dettagliSentiero" idSentiero=c.0 %}">{{ c.1 }}</a>
+                            </div>
+                            <div class="col-sm-6">
+                                {{ c.3 |capfirst | truncatewords:5 }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                  </div>
+                </div>
+            </div>
+
     {% endif %}
 {% endblock %}
