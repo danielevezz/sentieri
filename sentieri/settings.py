@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+EASY_MAPS_GOOGLE_KEY = 'AIzaSyAVgGs3qCV0tF2-6eOgGKOE0rk72_XckiQ'
 
 # Application definition
 
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'sentieriApp',
+    'easy_maps',
     'django.contrib.admin'
 ]
 

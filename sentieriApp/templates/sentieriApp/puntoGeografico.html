@@ -1,4 +1,5 @@
 {% extends "sentieriApp/blocks/template.html" %}
+{% load easy_maps_tags %}
 
 {% block body %}
     <h1>{{ punto.nome }}</h1>
@@ -6,6 +7,9 @@
     <span>{{ punto.longitudine }}</span>
     <p>{{ punto.descrizione }}</p>
     <br>
+
+    {% load easy_maps_tags %}
+    {% easy_map "Russia, Ekaterinburg, Mira 32"  300 400 using "easy_maps/map.html" %}
     <br>
     <hr>
     {% if sentieri %}
@@ -21,4 +25,6 @@
         {% endfor %}
         </ul>
     {% endif %}
+
+
 {% endblock %}

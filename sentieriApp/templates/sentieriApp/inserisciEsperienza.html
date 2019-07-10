@@ -1,27 +1,39 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
 {% block body %}
-    {% if form.errors %}
-        {% for field in form %}
-            {% for error in field.errors %}
-                <div class="alert alert-danger">
-                    <strong>{{ error|escape }}</strong>
+        <body>
+<div class="row">
+    <div class="col-md-4">
+        <form action="{% url "inserisciEsperienza" %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }} {{ field }}
                 </div>
             {% endfor %}
-        {% endfor %}
-        {% for error in form.non_field_errors %}
-            <div class="alert alert-danger">
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endif %}
+            <input type="submit" class="btn btn-primary col-md-8" value="Crea"/>
+        </form>
+    </div>
 
-    <form action="{% url "inserisciEsperienza" %}" method="post">
+</div>
 
-        {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_p }}
-        </div>
-            <input type="submit" class="btn btn-primary" value="Crea"/>
-    </form>
+<div class="mb-4"></div>
+
+    <!--div class="alert-warning">
+        {{ errors }}
+    </div>
+    <div class="mb-4"></div-->
+
+    <script>
+        tags = document.getElementsByTagName("input")
+        for (i = 0; i< tags.length; i++) {
+            if (tags[i].type != "checkbox")
+                tags[i].classList.add("form-control")
+        }
+
+        tags = document.getElementsByTagName("select")
+        for (i = 0; i< tags.length; i++) {
+                tags[i].classList.add("form-control")
+        }
+    </script>
 {% endblock %}
