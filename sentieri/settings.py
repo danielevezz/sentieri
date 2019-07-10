@@ -29,6 +29,7 @@ ALLOWED_HOSTS = []
 
 #EASY_MAPS_GOOGLE_KEY = 'AIzaSyAVgGs3qCV0tF2-6eOgGKOE0rk72_XckiQ' #padre
 EASY_MAPS_GOOGLE_KEY = 'AIzaSyB1gP8tKPgDPWcew7_nqTt_caqfZ4BiH80' #vezz
+GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyB1gP8tKPgDPWcew7_nqTt_caqfZ4BiH80'
 
 EASY_MAPS_ZOOM = 16
 EASY_MAPS_LANGUAGE = 'it'
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'sentieriApp',
     'easy_maps',
+    "geoposition",
     'django.contrib.admin'
 ]
 
