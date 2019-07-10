@@ -55,7 +55,7 @@ class Categoria(models.Model):
 
 
 class PuntoGeografico(models.Model):
-    latitudine = models.CharField(max_length=15, blank=True)
+    latitudine = models.CharField(max_length=15, blank=True )
     longitudine = models.CharField(max_length=15, blank=True)
     altitudine = models.IntegerField()
     nome = models.CharField(max_length=30)
