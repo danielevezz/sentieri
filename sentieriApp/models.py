@@ -1,6 +1,8 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from geoposition.fields import GeopositionField
+
 
 
 
@@ -53,12 +55,13 @@ class Categoria(models.Model):
 
 
 class PuntoGeografico(models.Model):
-    latitudine = models.CharField(max_length=15)
-    longitudine = models.CharField(max_length=15)
+    latitudine = models.CharField(max_length=15, blank=True)
+    longitudine = models.CharField(max_length=15, blank=True)
     altitudine = models.IntegerField()
     nome = models.CharField(max_length=30)
     descrizione = models.TextField(blank=True, default="")
     provincia = models.ForeignKey('Citta', on_delete=models.CASCADE)
+    posizione = GeopositionField()
 
     def __str__(self):
         return self.nome
