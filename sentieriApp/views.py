@@ -424,7 +424,9 @@ def dettagliUtente(request, idUtente):
 
 def dettagliLuogo(request, idLuogo):
     luogo = informazioni_luogo(idLuogo)
-    return render(request, 'sentieriApp/dettagliLuogo.html', {'luogo':luogo, 'sentieri':sentieri_di_un_luogo(idLuogo)})
+    ptogeog = luogo[13]
+    coordinate = str(ptogeog).replace(',', ', ')
+    return render(request, 'sentieriApp/dettagliLuogo.html', {'coordinate': coordinate, 'luogo':luogo, 'sentieri':sentieri_di_un_luogo(idLuogo)})
 
 
 
