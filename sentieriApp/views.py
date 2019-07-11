@@ -8,6 +8,7 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
 from django.db import connection
 from .queries import *
+from django.db.models import Q
 from . import views
 from django.db.models import Case, When
 
@@ -48,6 +49,7 @@ def elencoSentieri(request):
                 ordine = dati.get("ordine")
                 miaCitta = dati.get("miaCitta")
                 utentiMiaCitta = dati.get("utentiMiaCitta")
+                citta = dati.get("citta")
 
                 print(difficolta)
 
@@ -81,6 +83,12 @@ def elencoSentieri(request):
                 sentieri = sentieri.filter(difficolta__in=diff)
 
                 sentieri = sentieri.filter(titolo__icontains=titolo)
+
+                if citta != None:
+                    sent = sentieri_della_mia_citta(citta.id)
+                    ids = [i[0] for i in sent]
+                    sentieri = sentieri.filter(id__in=ids)
+                    print(sentieri)
 
                 if lunghezzaMax == None:
                     lunghezzaMax = 200
@@ -158,8 +166,6 @@ def elencoSentieri(request):
                         select={'ordering': ordering}, order_by=('ordering',))
                     print(sentieri)
 
-
-            print(sentieri.query)
 
             ids = []
             orderIds =""
