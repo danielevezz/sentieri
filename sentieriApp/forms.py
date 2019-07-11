@@ -64,7 +64,7 @@ class Filtro(Form):
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
     ciclico = forms.BooleanField(required=False)
-    media_alta = forms.CharField(required=False, label="Media voti più alta di")
+    media_alta = forms.IntegerField(required=False, label="Media voti più alta di")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
@@ -97,7 +97,7 @@ class FiltroNoLogin(Form):
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
     ciclico = forms.BooleanField(required=False)
-    media_alta = forms.CharField(required=False, label="Media voti più alta di")
+    media_alta = forms.IntegerField(required=False, label="Media voti più alta di")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
