@@ -210,8 +210,8 @@ def elencoSentieri(request):
                 media_alta = dati.get("media_alta")
                 titolo = dati.get("titolo")
                 ordine = dati.get("ordine")
+                citta = dati.get("citta")
 
-                print(difficolta)
 
                 if categorieR == "Tutte le categorie":
                     categorie = Categoria.objects.all()
@@ -234,6 +234,11 @@ def elencoSentieri(request):
                 if dislivelloMax == None:
                     dislivelloMax = 50000
                 sentieri = sentieri.filter(dislivello__lte=dislivelloMax)
+
+                if citta != None:
+                    sent = sentieri_della_mia_citta(citta.id)
+                    ids = [i[0] for i in sent]
+                    sentieri = sentieri.filter(id__in=ids)
 
                 sentieri = sentieri.filter(ciclico=ciclico)
 
@@ -292,7 +297,6 @@ def elencoSentieri(request):
                         select={'ordering': ordering}, order_by=('ordering',))
                     print(sentieri)
 
-            print(sentieri.query)
 
             ids = []
             orderIds = ""

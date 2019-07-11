@@ -93,7 +93,7 @@ class FiltroNoLogin(Form):
     SCELTE_CATEGORIA = tuple(zip(CATEG, CATEG))
 
     categoria = forms.CharField(max_length=max([x.__len__() for x in CATEG]), widget=forms.Select(choices=SCELTE_CATEGORIA), required=False)
-    #citta = forms.ModelChoiceField(queryset=Citta.objects.all(), required=False, label="Città di partenza o arrivo")
+    citta = forms.ModelChoiceField(queryset=Citta.objects.all(), required=False, label="Città di partenza o arrivo")
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
     ciclico = forms.BooleanField(required=False)

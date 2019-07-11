@@ -2,8 +2,15 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from geoposition.fields import GeopositionField
+from django.db import models
+from geoposition.fields import GeopositionField
 
 
+
+
+class PointOfInterest(models.Model):
+    name = models.CharField(max_length=100)
+    position = GeopositionField()
 
 
 class Sentiero(models.Model):

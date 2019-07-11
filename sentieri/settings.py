@@ -36,6 +36,15 @@ GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyAMNPUCgZH_ZvSPDW6pn7GVR_uA3YnAXQk'
 EASY_MAPS_ZOOM = 16
 EASY_MAPS_LANGUAGE = 'it'
 
+GEOPOSITION_MAP_OPTIONS = {
+    'minZoom': 3,
+    'maxZoom': 15,
+}
+
+GEOPOSITION_MARKER_OPTIONS = {
+    'cursor': 'move'
+}
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -157,3 +166,4 @@ STATIC_URL = '/static/sentieriApp/'
 
 # Redirect to home URL after login (Default redirects to /accounts/profile/)
 LOGIN_REDIRECT_URL = '/sentieri'
+
