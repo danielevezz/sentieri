@@ -422,7 +422,9 @@ def dettagliLuogo(request, idLuogo):
 
 def dettagliPuntoGeografico(request, idPtoGeografico):
     ptogeog = get_object_or_404(PuntoGeografico, pk=idPtoGeografico)
-    return render(request, 'sentieriApp/puntoGeografico.html', {'punto': ptogeog, "sentieri": sentieri_partenza_pto_geog(idPtoGeografico)})
+    coordinate = str(ptogeog.posizione.latitude).replace(',', '.')+", "+str(ptogeog.posizione.longitude).replace(',', '.')
+    print(coordinate)
+    return render(request, 'sentieriApp/puntoGeografico.html', {'coordinate': coordinate, 'punto': ptogeog, "sentieri": sentieri_partenza_pto_geog(idPtoGeografico)})
 
 
 
