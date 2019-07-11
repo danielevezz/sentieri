@@ -95,7 +95,9 @@ def elencoSentieri(request):
                 sentieri = sentieri.filter(lunghezza__lte=lunghezzaMax)
 
                 if preferiti:
-                    sentieri = sentieri.filter(preferito__user_id=request.user.id)
+                    sent = sentieri_preferiti(request.user.id)
+                    ids = [i[0] for i in sent]
+                    sentieri = sentieri.filter(id__in=ids)
 
                 if miaCitta:
                     residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza

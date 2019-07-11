@@ -407,6 +407,17 @@ def sentieri_di_categorie_preferite(idUser):
         table = cursor.fetchall()
     return table
 
+def sentieri_preferiti(idUser):
+    query= """select sentiero.*
+                from sentiero
+                join preferito
+                on preferito.sentiero_id = sentiero.id
+                where preferito.user_id="""+str(idUser)
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
 
 def info_complete_sentieri_id(idSentieri, ordersID):
 
