@@ -428,15 +428,17 @@ def dettagliUtente(request, idUtente):
 
 def dettagliLuogo(request, idLuogo):
     luogo = informazioni_luogo(idLuogo)
-    ptogeog = luogo[13]
-    coordinate = str(ptogeog).replace(',', ', ')
+    ptogeog = PuntoGeografico.objects.get(luogo__id=idLuogo)
+    print(ptogeog.posizione)
+    coordinate = str(ptogeog.posizione).replace(',', ', ')
+    print(coordinate)
     return render(request, 'sentieriApp/dettagliLuogo.html', {'coordinate': coordinate, 'luogo':luogo, 'sentieri':sentieri_di_un_luogo(idLuogo)})
 
 
 
 def dettagliPuntoGeografico(request, idPtoGeografico):
     ptogeog = get_object_or_404(PuntoGeografico, pk=idPtoGeografico)
-    coordinate = str(ptogeog.posizione.latitude).replace(',', '.')+", "+str(ptogeog.posizione.longitude).replace(',', '.')
+    coordinate = str(ptogeog.posizione).replace(',', ', ')
     print(coordinate)
     return render(request, 'sentieriApp/puntoGeografico.html', {'coordinate': coordinate, 'punto': ptogeog, "sentieri": sentieri_partenza_pto_geog(idPtoGeografico)})
 

@@ -7,7 +7,7 @@
     <p>{{ luogo.13 }}</p>
     {% load easy_maps_tags %}
     {% easy_map coordinate 300 400 %}
-    {% if luogo.2 %}
+    {% if luogo.2 != "" %}
      <br>
      <p><a href={{ luogo.2 }}>Sito internet</a></p>
     {% endif %}
