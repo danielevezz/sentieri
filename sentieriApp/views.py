@@ -129,8 +129,10 @@ def elencoSentieri(request):
                 print("dislivello")
                 print(sentieri)
 
-
-                sentieri = sentieri.filter(ciclico=ciclico)
+                if ciclico=="Si":
+                    sentieri = sentieri.filter(ciclico=True)
+                elif ciclico=="No":
+                    sentieri = sentieri.filter(ciclico=False)
                 print("ciclico")
                 print(sentieri)
 
@@ -328,7 +330,10 @@ def elencoSentieri(request):
                     ids = [i[0] for i in sent]
                     sentieri = sentieri.filter(id__in=ids)
 
-                sentieri = sentieri.filter(ciclico=ciclico)
+                if ciclico == "Si":
+                    sentieri = sentieri.filter(ciclico=True)
+                elif ciclico == "No":
+                    sentieri = sentieri.filter(ciclico=False)
 
                 sentieri = sentieri.filter(difficolta__in=diff)
 

@@ -63,7 +63,7 @@ class Filtro(Form):
     citta = forms.ModelChoiceField(queryset=Citta.objects.all(), required=False, label="Città di partenza o arrivo")
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
-    ciclico = forms.BooleanField(required=False)
+    ciclico = forms.CharField(required=False, widget=forms.Select(choices=[("Si","Si"), ("No", "No"), ("Entrambi", "Entrambi")]))
     media_alta = forms.IntegerField(min_value=0, max_value=10, required=False, label="Media voti più alta di")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
@@ -98,14 +98,14 @@ class FiltroNoLogin(Form):
     citta = forms.ModelChoiceField(queryset=Citta.objects.all(), required=False, label="Città di partenza o arrivo")
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
-    ciclico = forms.BooleanField(required=False)
+    ciclico = forms.CharField(required=False, widget=forms.Select(choices=[("Si","Si"), ("No", "No"), ("Entrambi", "Entrambi")]))
     media_alta = forms.IntegerField(min_value=0, max_value=10, required=False, label="Media voti più alta di")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
     lunghezzaMax = forms.IntegerField(min_value=0, max_value=200, required=False, label="Lunghezza massima (Km)")
     ordine = forms.CharField(required=False, label="Ordina per", widget=forms.Select(choices=[("Titolo","Titolo"), ("Voto", "Voto"), ("Partecipanti", "Partecipanti")]))
-    tipiLuoghi = forms.ModelChoiceField(required=False, queryset=TipologiaLuogo.objects.all(), label="Quali tipologie di luoghi devono esserci")
+    tipiLuoghi = forms.ModelMultipleChoiceField(required=False, queryset=TipologiaLuogo.objects.all(), label="Quali tipologie di luoghi devono esserci")
 
 
 
