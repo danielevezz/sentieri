@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import ModelForm, Form
 from django.contrib.auth.forms import UserCreationForm
-from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, DIFFICOLTA_CAI, Categoria, Preferito
+from .models import Utente, OPZIONI_SESSO, Citta, Sentiero, EsperienzaPersonale, DIFFICOLTA_CAI, Categoria, Preferito, Tappa, TipologiaLuogo
 
 import datetime
 
@@ -64,7 +64,7 @@ class Filtro(Form):
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
     ciclico = forms.BooleanField(required=False)
-    media_alta = forms.IntegerField(required=False, label="Media voti più alta di")
+    media_alta = forms.IntegerField(min_value=0, max_value=10, required=False, label="Media voti più alta di")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
@@ -73,6 +73,8 @@ class Filtro(Form):
     ordine = forms.CharField(required=False, label="Ordina per", widget=forms.Select(choices=[("Titolo","Titolo"), ("Voto", "Voto"), ("Partecipanti", "Partecipanti")]))
     miaCitta = forms.BooleanField(required=False, label="Solo percorsi della mia città")
     utentiMiaCitta = forms.BooleanField(required=False, label="Solo percorsi effettuati da utenti della mia città")
+    tipiLuoghi = forms.ModelMultipleChoiceField(required=False, queryset=TipologiaLuogo.objects.all(), label="Quali tipologie di luoghi devono esserci")
+
 
 
 
@@ -97,12 +99,13 @@ class FiltroNoLogin(Form):
     durataMax = forms.IntegerField(min_value=0, max_value=50, label="Durata massima (Ore)", required=False) #Ore
     dislivelloMax = forms.IntegerField(min_value=0, max_value=50000, label="Dislivello Massimo (m)", required=False) #Metri
     ciclico = forms.BooleanField(required=False)
-    media_alta = forms.IntegerField(required=False, label="Media voti più alta di")
+    media_alta = forms.IntegerField(min_value=0, max_value=10, required=False, label="Media voti più alta di")
     difficolta = forms.CharField(max_length=3, widget=forms.Select(\
         choices=DIFFICOLTA_CAI + (("ALL", "Tutte le difficoltà"),)), required=False)
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
     lunghezzaMax = forms.IntegerField(min_value=0, max_value=200, required=False, label="Lunghezza massima (Km)")
     ordine = forms.CharField(required=False, label="Ordina per", widget=forms.Select(choices=[("Titolo","Titolo"), ("Voto", "Voto"), ("Partecipanti", "Partecipanti")]))
+    tipiLuoghi = forms.ModelMultipleChoiceField(required=False, queryset=TipologiaLuogo.objects.all(), label="Quali tipologie di luoghi devono esserci")
 
 
 

@@ -50,8 +50,49 @@ def elencoSentieri(request):
                 miaCitta = dati.get("miaCitta")
                 utentiMiaCitta = dati.get("utentiMiaCitta")
                 citta = dati.get("citta")
+                tipiLuoghi = dati.get("tipiLuoghi")
 
-                print(difficolta)
+                sentieri = Sentiero.objects.all()
+                sentieri = sentieri.all()
+
+                if ordine == "Voto":
+                    print("Voto")
+                    sentieri_ordinati = ordina_sentieri_per_voto()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    print(sentieri_ids)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+
+                elif ordine == "Partecipanti":
+                    print("Partecipanti")
+                    sentieri_ordinati = ordina_sentieri_per_percorrenze()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    print(sentieri_ids)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+                else:
+                    print("Titolo")
+                    sentieri_ordinati = ordina_sentieri_per_titolo()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    print(sentieri_ids)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    print(ordering)
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
 
                 if categorieR == "Tutte le categorie":
                     categorie = Categoria.objects.all()
@@ -68,7 +109,7 @@ def elencoSentieri(request):
                 else:
                     diff = [difficolta]
 
-                sentieri = Sentiero.objects.filter(categoria__in=categorie)
+                sentieri = sentieri.filter(categoria__in=categorie)
 
                 if durataMax == None:
                     durataMax = 50
@@ -83,6 +124,9 @@ def elencoSentieri(request):
                 sentieri = sentieri.filter(difficolta__in=diff)
 
                 sentieri = sentieri.filter(titolo__icontains=titolo)
+
+                if tipiLuoghi:
+                    sentieri = sentieri.filter(tappa__luogo__tipoLuogo__in=tipiLuoghi)
 
                 if citta != None:
                     sent = sentieri_della_mia_citta(citta.id)
@@ -119,7 +163,7 @@ def elencoSentieri(request):
 
 
 
-                if media_alta:
+                if media_alta != None:
                     sentieri_voti= sentieri_media_voti_piu_alta_di(str(media_alta))
                     sentieri_voti_ids=[]
                     for item in sentieri_voti:
@@ -128,45 +172,6 @@ def elencoSentieri(request):
 
                     sentieri= sentieri.filter(id__in=sentieri_voti_ids)
 
-
-
-                if ordine == "Voto":
-                    print("Voto")
-                    sentieri_ordinati = ordina_sentieri_per_voto()
-                    sentieri_ids = []
-                    for item in sentieri_ordinati:
-                        id = item[0]
-                        sentieri_ids.append(id)
-                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                    ordering = 'CASE %s END' % clauses
-                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                        select={'ordering': ordering}, order_by=('ordering',))
-                    print(sentieri)
-
-                elif ordine == "Partecipanti":
-                    print("Partecipanti")
-                    sentieri_ordinati = ordina_sentieri_per_percorrenze()
-                    sentieri_ids = []
-                    for item in sentieri_ordinati:
-                        id = item[0]
-                        sentieri_ids.append(id)
-                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                    ordering = 'CASE %s END' % clauses
-                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                        select={'ordering': ordering}, order_by=('ordering',))
-                    print(sentieri)
-                else:
-                    print("Titolo")
-                    sentieri_ordinati = ordina_sentieri_per_titolo()
-                    sentieri_ids = []
-                    for item in sentieri_ordinati:
-                        id = item[0]
-                        sentieri_ids.append(id)
-                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                    ordering = 'CASE %s END' % clauses
-                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                        select={'ordering': ordering}, order_by=('ordering',))
-                    print(sentieri)
 
 
             ids = []
@@ -212,6 +217,47 @@ def elencoSentieri(request):
                 ordine = dati.get("ordine")
                 citta = dati.get("citta")
 
+                sentieri = Sentiero.objects.all()
+
+                if ordine == "Voto":
+                    print("Voto")
+                    sentieri_ordinati = ordina_sentieri_per_voto()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    print(sentieri_ids)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+
+                elif ordine == "Partecipanti":
+                    print("Partecipanti")
+                    sentieri_ordinati = ordina_sentieri_per_percorrenze()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    print(sentieri_ids)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+                else:
+                    print("Titolo")
+                    sentieri_ordinati = ordina_sentieri_per_titolo()
+                    sentieri_ids = []
+                    for item in sentieri_ordinati:
+                        id = item[0]
+                        sentieri_ids.append(id)
+                    print(sentieri_ids)
+                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
+                    ordering = 'CASE %s END' % clauses
+                    print(ordering)
+                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
+                        select={'ordering': ordering}, order_by=('ordering',))
+
 
                 if categorieR == "Tutte le categorie":
                     categorie = Categoria.objects.all()
@@ -225,7 +271,7 @@ def elencoSentieri(request):
                 else:
                     diff = [difficolta]
 
-                sentieri = Sentiero.objects.filter(categoria__in=categorie)
+                sentieri = sentieri.filter(categoria__in=categorie)
 
                 if durataMax == None:
                     durataMax = 50
@@ -259,43 +305,6 @@ def elencoSentieri(request):
                     sentieri = sentieri.filter(id__in=sentieri_voti_ids)
                     print(sentieri)
 
-                if ordine == "Voto":
-                    print("Voto")
-                    sentieri_ordinati = ordina_sentieri_per_voto()
-                    sentieri_ids = []
-                    for item in sentieri_ordinati:
-                        id = item[0]
-                        sentieri_ids.append(id)
-                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                    ordering = 'CASE %s END' % clauses
-                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                        select={'ordering': ordering}, order_by=('ordering',))
-                    print(sentieri)
-
-                elif ordine == "Partecipanti":
-                    print("Partecipanti")
-                    sentieri_ordinati = ordina_sentieri_per_percorrenze()
-                    sentieri_ids = []
-                    for item in sentieri_ordinati:
-                        id = item[0]
-                        sentieri_ids.append(id)
-                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                    ordering = 'CASE %s END' % clauses
-                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                        select={'ordering': ordering}, order_by=('ordering',))
-                    print(sentieri)
-                else:
-                    print("Titolo")
-                    sentieri_ordinati = ordina_sentieri_per_titolo()
-                    sentieri_ids = []
-                    for item in sentieri_ordinati:
-                        id = item[0]
-                        sentieri_ids.append(id)
-                    clauses = ' '.join(['WHEN id=%s THEN %s' % (pk, i) for i, pk in enumerate(sentieri_ids)])
-                    ordering = 'CASE %s END' % clauses
-                    sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
-                        select={'ordering': ordering}, order_by=('ordering',))
-                    print(sentieri)
 
 
             ids = []
