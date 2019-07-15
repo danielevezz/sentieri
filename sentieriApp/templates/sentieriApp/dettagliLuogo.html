@@ -1,8 +1,17 @@
 {% extends "sentieriApp/blocks/template.html" %}
 
+<head>
+  <link href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
+</head>
+<head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+</head>
+
 {% block body %}
+    <i class="material-icons">place</i>
     <!--nome_luogo   descrizione_luogo    sito    nome_tipo   descrizione_tipo   ptoGeografico_id  id_pto  latitudine   longitudine  -->
-    <h1 class="mt-3">{{ luogo.0 }}</h1>
+    <h1 class="mt-3"> {{ luogo.0 }}</h1>
     <p>{{ luogo.1 }}</p>
     <p>{{ luogo.13 }}</p>
     {% load easy_maps_tags %}
@@ -31,3 +40,4 @@
 
 
 {% endblock %}
+
