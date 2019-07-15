@@ -105,7 +105,7 @@ class FiltroNoLogin(Form):
     titolo = forms.CharField(required=False, label="Ricerca per parola chiave")
     lunghezzaMax = forms.IntegerField(min_value=0, max_value=200, required=False, label="Lunghezza massima (Km)")
     ordine = forms.CharField(required=False, label="Ordina per", widget=forms.Select(choices=[("Titolo","Titolo"), ("Voto", "Voto"), ("Partecipanti", "Partecipanti")]))
-    tipiLuoghi = forms.ModelMultipleChoiceField(required=False, queryset=TipologiaLuogo.objects.all(), label="Quali tipologie di luoghi devono esserci")
+    tipiLuoghi = forms.ModelChoiceField(required=False, queryset=TipologiaLuogo.objects.all(), label="Quali tipologie di luoghi devono esserci")
 
 
 

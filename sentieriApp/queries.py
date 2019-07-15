@@ -329,6 +329,25 @@ def sentieri_della_mia_citta(idProvincia):
         table = cursor.fetchall()
     return table
 
+def sentieri_con_un_luogo(nomeLuogo):
+    query = """select distinct sentiero.*
+                from sentiero
+                
+                join tappa
+                on tappa.sentiero_id = sentiero.id
+                
+                join luogo
+                on luogo.id = tappa.luogo_id
+                
+                join tipologia_luogo
+                on luogo."tipoLuogo_id" = tipologia_luogo.id
+                
+                where tipologia_luogo.nome = '"""+str(nomeLuogo)+"'"
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        table = cursor.fetchall()
+    return table
+
 
 def sentieri_percorsi_solo_da_utenti_della_mia_citta(idProvincia):
     query = """

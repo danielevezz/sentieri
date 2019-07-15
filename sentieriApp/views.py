@@ -94,6 +94,8 @@ def elencoSentieri(request):
                     sentieri = sentieri.filter(pk__in=sentieri_ids).extra(
                         select={'ordering': ordering}, order_by=('ordering',))
 
+                print(sentieri)
+
                 if categorieR == "Tutte le categorie":
                     categorie = Categoria.objects.all()
                     categorie = [c.nome for c in categorie]
@@ -111,37 +113,68 @@ def elencoSentieri(request):
 
                 sentieri = sentieri.filter(categoria__in=categorie)
 
+                print("categorie")
+                print(sentieri)
+
                 if durataMax == None:
                     durataMax = 50
                 sentieri = sentieri.filter(durata__lte=durataMax)
+                print("durata")
+                print(sentieri)
+
 
                 if dislivelloMax == None:
                     dislivelloMax = 50000
                 sentieri = sentieri.filter(dislivello__lte=dislivelloMax)
+                print("dislivello")
+                print(sentieri)
+
 
                 sentieri = sentieri.filter(ciclico=ciclico)
+                print("ciclico")
+                print(sentieri)
+
 
                 sentieri = sentieri.filter(difficolta__in=diff)
+                print("difficoltà")
+                print(sentieri)
+
 
                 sentieri = sentieri.filter(titolo__icontains=titolo)
+                print("titolo")
+                print(sentieri)
+
 
                 if tipiLuoghi:
-                    sentieri = sentieri.filter(tappa__luogo__tipoLuogo__in=tipiLuoghi)
+                    for tipo in tipiLuoghi:
+                        sent = sentieri_con_un_luogo(tipo)
+                        ids = [i[0] for i in sent]
+                        sentieri = sentieri.filter(id__in=ids)
+                print("luoghi")
+                print(sentieri)
+
 
                 if citta != None:
                     sent = sentieri_della_mia_citta(citta.id)
                     ids = [i[0] for i in sent]
                     sentieri = sentieri.filter(id__in=ids)
+                    print("città")
                     print(sentieri)
 
                 if lunghezzaMax == None:
                     lunghezzaMax = 200
                 sentieri = sentieri.filter(lunghezza__lte=lunghezzaMax)
+                print("lunghezza")
+                print(sentieri)
+
 
                 if preferiti:
                     sent = sentieri_preferiti(request.user.id)
                     ids = [i[0] for i in sent]
                     sentieri = sentieri.filter(id__in=ids)
+                print("preferiti")
+                print(sentieri)
+
 
                 if miaCitta:
                     residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
@@ -151,6 +184,9 @@ def elencoSentieri(request):
                     ids = [i[0] for i in sent]
 
                     sentieri = sentieri.filter(id__in=ids)
+                print("mia città")
+                print(sentieri)
+
 
                 if utentiMiaCitta:
                     residenza = Utente.objects.filter(id=request.user.id).select_related("residenza").get().residenza
@@ -160,6 +196,9 @@ def elencoSentieri(request):
                     ids = [i[0] for i in sent]
 
                     sentieri = sentieri.filter(id__in=ids)
+                print("utenti città")
+                print(sentieri)
+
 
 
 
@@ -171,6 +210,9 @@ def elencoSentieri(request):
                         sentieri_voti_ids.append(id)
 
                     sentieri= sentieri.filter(id__in=sentieri_voti_ids)
+                print("media")
+                print(sentieri)
+
 
 
 
