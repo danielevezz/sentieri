@@ -56,8 +56,8 @@ INSTALLED_APPS = [
     'sentieriApp',
     'easy_maps',
     "geoposition",
-    'django_material_icons',
-    'django.contrib.admin'
+    "django_icons",
+    'django.contrib.admin',
 ]
 
 MIDDLEWARE = [

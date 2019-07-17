@@ -1,5 +1,8 @@
+{% load icons %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css" integrity="sha256-PF6MatZtiJ8/c9O9HQ8uSUXr++R9KBYu4gbNG5511WE=" crossorigin="anonymous" />
+
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-  <a class="navbar-brand" href="{% url "index" %}">Sentieri</a>
+  <a class="navbar-brand" href="{% url "index" %}">{% icon 'mountain' %} Sentieri</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -7,13 +10,13 @@
   <div class="collapse navbar-collapse" id="navbarText">
     <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-            <a class="nav-link" href="{% url "elencoSentieri" %}">Ricerca
-            <span class="sr-only">(current)</span>
+            <a class="nav-link" href="{% url "elencoSentieri" %}">{% icon 'search' %} Ricerca
+                <span class="sr-only">(current)</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="{% url "elencoUtenti" %}">Utenti
-            <span class="sr-only">(current)</span>
+            <a class="nav-link" href="{% url "elencoUtenti" %}">{% icon 'users' %} Utenti
+                <span class="sr-only">(current)</span>
             </a>
         </li>
     </ul>

@@ -1,8 +1,16 @@
 {% extends "sentieriApp/blocks/template.html" %}
+{% load icons %}
 
 {% block body %}
     <h1 class="mt-3">{{ sentiero.1 }}</h1>
-    <h5>Voto utenti: {{ sentiero.19 }}</h5>
+    <h5 class="text-warning">
+        {% with ''|center:sentiero.19 as range %}
+        {% for _ in range %}
+            {% icon 'star' %}
+        {% endfor %}
+        {% endwith %}
+    </h5>
+
     <h5 class="text-muted">{{ sentiero.14 }}</h5>
     {% if user.is_authenticated %}
         <form method="POST">
@@ -14,9 +22,7 @@
             {% endif %}
         </form>
     {% endif %}
-    <br>
-    <p class="text-justify mt-2 mb-4">Descrizione:</p>
-    <p class="text-justify mt-2 mb-4">{{ sentiero.3 }}</p>
+    <p class="text-justify mt-4 mb-4">{{ sentiero.3 }}</p>
 
     <div class="row">
         <!--durata,ciclico      altMinMax,disli,sal,disc        difficID,diffmedia-->
@@ -30,9 +36,7 @@
         <div class="col-md-4 mb-2">
             <ul class="list-group">
                 <li class="list-group-item list-group-item-primary"><b>Percorso</b></li>
-                {% if sentiero.21 == 0 %}
-                    <li class="list-group-item">Lunghezza: Non disponibile</li>
-                {% else %}
+                {% if not sentiero.21 == 0 %}
                     <li class="list-group-item">Lunghezza <b>{{ sentiero.21 }}</b> km</li>
                 {% endif %}
                 <li class="list-group-item">Min: <b>{{ sentiero.8 }}</b> m</li>
