@@ -366,7 +366,8 @@ def sentieri_percorsi_solo_da_utenti_della_mia_citta(idProvincia):
                                                             where e1.sentiero_id = e2.sentiero_id and """ + str(
         idProvincia) + """ <> u2.residenza_id
                                                             )
-                                            )
+                                            ) and sentiero.id in (select sentiero_id
+                                                                from esperienza e1)
 
                 """
     with connection.cursor() as cursor:
