@@ -19,3 +19,5 @@ admin.site.register(Utente)
 admin.site.register(TipologiaLuogo)
 admin.site.register(EsperienzaPersonale)
 admin.site.register(Preferito)
+
+admin.site.site_header = "Sentieri ";

@@ -8,9 +8,8 @@ from django.contrib.auth import login, authenticate
 from django.http import HttpResponseNotFound, Http404
 from django.db import connection
 from .queries import *
-from django.db.models import Q
-from . import views
-from django.db.models import Case, When
+from itertools import groupby
+from operator import itemgetter
 
 # Una view in postgres
 # create view as ...
@@ -473,10 +472,21 @@ def dettagliUtente(request, idUtente):
     if request.user.is_authenticated:
         if request.user.id == idUtente:
             utente = get_object_or_404(Utente, pk=idUtente)
-            esperienze = EsperienzaPersonale.objects.filter(user_id=idUtente).select_related()
+            nEsperienze = EsperienzaPersonale.objects.filter(user_id=idUtente).select_related().count()
+            items = EsperienzaPersonale.objects.filter(user_id=idUtente).values('sentiero__titolo', 'sentiero__id',
+                                                                                'data_esperienza',
+                                                                                'voto', 'difficolta',
+                                                                                'commento__testo').order_by('sentiero__titolo')
+            rows = groupby(items, itemgetter('sentiero__titolo'))
+            esperienze = {c_title: list(items) for c_title, items in rows}
             interessi = Interessi.objects.filter(user_id=idUtente).select_related()
-            return render(request, 'sentieriApp/dettagliUtente.html', {'utente': utente, 'esperienze': esperienze,
+            return render(request, 'sentieriApp/dettagliUtente.html', {'utente': utente, 'esperienze': esperienze.items(),
+                                                                       'nEsp':nEsperienze,
                                                                        'personale': True, 'interessi': interessi})
+
+
+
+
 
     return render(request, 'sentieriApp/dettagliUtente.html', {"utente": utentePubblico(idUtente),
                                                                "sentieri_effettuati": sentieri_effettuati(idUtente),

@@ -17,16 +17,27 @@
         {% endif %}
         <hr>
         <h2>Esperienze personali</h2>
-        <h5 class="text-muted">{{ esperienze | length }} esperienze</h5>
+        <h5 class="text-muted">{{ nEsp }} esperienze</h5>
         <h6 class="mb-4"><a href="{% url "inserisciEsperienza" %}">Aggiungi nuova esperienza</a></h6>
-        {% for e in esperienze %}
-            <h4> <a href="{% url "dettagliSentiero" idSentiero=e.sentiero_id%}">{{ e.sentiero }}</a></h4>
-            <p class="text-muted">{{ e.data_esperienza }}</p>
-            <p>Voto: {{ e.voto }}</p>
-            <p>Difficolta: {{ e.difficolta }}</p>
-            <div class="alert-light">Commento: {{ e.commento_set.get | capfirst }}</div>
-            <hr>
+        <!--'sentiero__titolo', 'sentiero__id', 'data_esperienza', 'voto', 'difficolta', 'commento__testo'-->
+
+        {% for e,x in esperienze %}
+                <a class="mb-3 mr-1" type="button" data-toggle="collapse" data-target="#collapseSentieri{{ x.0.sentiero__id }}"
+                        aria-expanded="false" aria-controls="collapseExample">
+                <h5>{{ e }}</h5>
+                </a>
+            <div class="collapse col-md-6" id="collapseSentieri{{ x.0.sentiero__id }}">
+                {% for p in x %}
+                        <p class="text-muted">{{ p.data_esperienza }}</p>
+                        <p>Voto: {{ p.voto }}</p>
+                        <p>Difficolta: {{ p.difficolta }}</p>
+                        <div class="alert-light">{{ p.commento__testo }}</div>
+                        <hr>
+                {% endfor %}
+            </div>
+
         {% endfor %}
+
 
     {% else %}
         <h1 class="mb-3">{{ utente.1 }}</h1>
