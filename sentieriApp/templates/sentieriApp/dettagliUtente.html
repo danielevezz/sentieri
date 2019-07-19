@@ -22,11 +22,12 @@
         <!--'sentiero__titolo', 'sentiero__id', 'data_esperienza', 'voto', 'difficolta', 'commento__testo'-->
 
         {% for e,x in esperienze %}
-                <a class="mb-3 mr-1" type="button" data-toggle="collapse" data-target="#collapseSentieri{{ x.0.sentiero__id }}"
+            <div class="esperienza">
+                <a class="mb-3 mr-1" data-toggle="collapse" data-target="#collapseSentieri{{ x.0.sentiero__id }}"
                         aria-expanded="false" aria-controls="collapseExample">
                 <h5>{{ e }}</h5>
                 </a>
-            <div class="collapse col-md-6" id="collapseSentieri{{ x.0.sentiero__id }}">
+            <div class="collapse " id="collapseSentieri{{ x.0.sentiero__id }}">
                 {% for p in x %}
                         <p class="text-muted">{{ p.data_esperienza }}</p>
                         <p>Voto: {{ p.voto }}</p>
@@ -35,7 +36,7 @@
                         <hr>
                 {% endfor %}
             </div>
-
+            </div>
         {% endfor %}
 
 

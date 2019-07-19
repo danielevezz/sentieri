@@ -7,7 +7,10 @@
     <p>{{ luogo.1 }}</p>
     <p>{{ luogo.13 }}</p>
     {% load easy_maps_tags %}
-    {% easy_map coordinate 300 400 %}
+    <div class="embed-responsive-16by9">
+        {% easy_map coordinate 300 400 %}
+    </div>
+
     {% if luogo.2 != "" %}
      <br>
      <p><a href={{ luogo.2 }}>Sito internet</a></p>
@@ -18,7 +21,6 @@
     <hr>
      {% if sentieri %}
         <h4>Sentieri che passano da qui:</h4>
-        <ul>
         {% for s in sentieri %}
             <div class="card mb-1">
                     <div class="card-body">
@@ -27,7 +29,6 @@
                     </div>
                 </div>
         {% endfor %}
-        </ul>
     {% endif %}
 
 

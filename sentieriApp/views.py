@@ -462,9 +462,12 @@ def dettagliSentiero(request, idSentiero):
     else:
         res = False
 
+    l = [list(informazioni_luogo(x[0])) for x in luoghi]
+    print(l)
     return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero,
                                                                  "commenti": commenti_di_un_sentiero(idSentiero),
-                                                                 'preferito': res, 'form': form, 'luoghi': luoghi})
+                                                                 'preferito': res, 'form': form, 'luoghi': luoghi,
+                                                                 'infoLuoghi': l})
 
 
 
