@@ -33,7 +33,26 @@
         {% else %}
             Non ci sono sentieri con questi filtri!
         {% endif %}
+        <nav class="mt-3">
+            <ul class="pagination">
+                {% if sentieri.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">&laquo; prima</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ sentieri.previous_page_number }}">precedente</a></li>
+                {% endif %}
+
+                <li class="page-item">
+                    <a class="page-link">Pagina {{ sentieri.number }} di {{ sentieri.paginator.num_pages }}.</a>
+                </li>
+
+                {% if sentieri.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ sentieri.next_page_number }}">successiva</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ sentieri.paginator.num_pages }}">ultima &raquo;</a></li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
+
+
 </div>
 
 <div class="mb-4"></div>

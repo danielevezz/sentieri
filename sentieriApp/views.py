@@ -10,6 +10,7 @@ from django.db import connection
 from .queries import *
 from itertools import groupby
 from operator import itemgetter
+from django.core.paginator import Paginator
 
 # Una view in postgres
 # create view as ...
@@ -367,6 +368,10 @@ def elencoSentieri(request):
             else:
                 dati_sentieri = []
 
+            paginator = Paginator(dati_sentieri, 5)  # 2 sentieri per pagina
+            page = request.GET.get('page')
+            dati_sentieri = paginator.get_page(page)
+
             return render(request, 'sentieriApp/elencoSentieri.html',
                           {'sentieri': dati_sentieri, 'form': filtroNoLogin})
 
@@ -378,6 +383,10 @@ def elencoSentieri(request):
                                      'ciclico': False})
 
     dati_sentieri = info_complete_sentieri()
+
+    paginator = Paginator(dati_sentieri, 1)  # 2 sentieri per pagina
+    page = request.GET.get('page')
+    dati_sentieri = paginator.get_page(page)
     return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri': dati_sentieri, 'form': filtro,
                                                                'errors': filtro.errors})
 

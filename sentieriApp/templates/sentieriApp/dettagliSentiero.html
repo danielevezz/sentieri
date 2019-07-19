@@ -74,9 +74,39 @@
             </ul>
         </div>
         </div>
+            <script>
+            var map;
+            function initMap() {
+                luoghi = {{ infoLuoghi | safe }};
+                centro = luoghi[0][luoghi[0].length-1];
+                centro = centro.split(",");
+                console.log(centro)
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: parseInt(centro[0]), lng: parseInt(centro[1])},
+                    zoom: 10
+                });
 
 
-        <br>
+
+                console.log(luoghi)
+
+                for(i = 0; i<luoghi.length; i++) {
+                    pos = luoghi[i][luoghi[i].length-1];
+                    pos = pos.split(",");
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: {
+                            lat: parseInt(pos[0]), lng: parseInt(pos[1]),
+                            title: luoghi[i][0]
+                        }
+                    });
+                }
+
+            }
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMNPUCgZH_ZvSPDW6pn7GVR_uA3YnAXQk&callback=initMap"
+        async defer></script>
+
     {% endif %}
 
     <hr>
@@ -98,38 +128,6 @@
 
     {% endif %}
 
-    <script>
-        var map;
-        function initMap() {
-            luoghi = {{ infoLuoghi | safe }};
-            centro = luoghi[0][luoghi[0].length-1];
-            centro = centro.split(",");
-            console.log(centro)
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: parseInt(centro[0]), lng: parseInt(centro[1])},
-                zoom: 10
-            });
-
-
-
-            console.log(luoghi)
-
-            for(i = 0; i<luoghi.length; i++) {
-                pos = luoghi[i][luoghi[i].length-1];
-                pos = pos.split(",");
-                marker = new google.maps.Marker({
-                    map: map,
-                    position: {
-                        lat: parseInt(pos[0]), lng: parseInt(pos[1]),
-                        title: luoghi[i][0]
-                    }
-                });
-            }
-
-        }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAMNPUCgZH_ZvSPDW6pn7GVR_uA3YnAXQk&callback=initMap"
-    async defer></script>
 
 
 {% endblock %}
