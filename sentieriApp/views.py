@@ -384,7 +384,7 @@ def elencoSentieri(request):
 
     dati_sentieri = info_complete_sentieri()
 
-    paginator = Paginator(dati_sentieri, 1)  # 2 sentieri per pagina
+    paginator = Paginator(dati_sentieri, 5)  # 2 sentieri per pagina
     page = request.GET.get('page')
     dati_sentieri = paginator.get_page(page)
     return render(request, 'sentieriApp/elencoSentieri.html', {'sentieri': dati_sentieri, 'form': filtro,
