@@ -82,7 +82,7 @@
                 centro = centro.split(",");
                 console.log(centro)
                 map = new google.maps.Map(document.getElementById('map'), {
-                    center: {lat: parseInt(centro[0]), lng: parseInt(centro[1])},
+                    center: {lat: parseFloat(centro[0]), lng: parseFloat(centro[1])},
                     zoom: 10
                 });
 
@@ -95,10 +95,9 @@
                     pos = pos.split(",");
                     marker = new google.maps.Marker({
                         map: map,
-                        position: {
-                            lat: parseInt(pos[0]), lng: parseInt(pos[1]),
-                            title: luoghi[i][0]
-                        }
+                        position: new google.maps.LatLng(parseFloat(pos[0]),parseFloat(pos[1])),
+                        title: luoghi[i][0],
+                        label: luoghi[i][0][0]
                     });
                 }
 
