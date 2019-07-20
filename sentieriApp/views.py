@@ -472,6 +472,12 @@ def dettagliSentiero(request, idSentiero):
         res = False
 
     l = [list(informazioni_luogo(x[0])) for x in luoghi]
+    i=0
+    while i<(l[0].__len__()):
+        print(i)
+        print(l[0][i])
+        i=i+1
+
     print(l)
     return render(request, 'sentieriApp/dettagliSentiero.html', {'sentiero': sentiero,
                                                                  "commenti": commenti_di_un_sentiero(idSentiero),

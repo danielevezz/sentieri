@@ -83,7 +83,8 @@ def sentieri_di_un_luogo(idLuogo):
 def informazioni_luogo(idLuogo):
     query = """select luogo.nome as nome_luogo, luogo.descrizione as descrizione_luogo,
                 luogo.sito, tipologia_luogo.nome as nome_tipo, tipologia_luogo.descrizione as descrizione_tipo, 
-                punto_geografico.*
+                punto_geografico.id, punto_geografico.latitudine, punto_geografico.longitudine, punto_geografico.altitudine,
+                punto_geografico.nome, punto_geografico.descrizione, punto_geografico."provincia_id", punto_geografico.posizione
                 from luogo
                 join tipologia_luogo
                 on luogo."tipoLuogo_id"= tipologia_luogo.id
